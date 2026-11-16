@@ -4,7 +4,8 @@ Finds every insurance requirement in a contract, proves each one with an exact q
 
 | Folder | Contents |
 |---|---|
-| `app/index.html` | The prototype (open in a browser, click **use saved sample**) |
+| `app/index.html` | The prototype (open in a browser, click **use saved sample**), built by `app/build.py` |
+| `app/src/` | Source: `app.js` (logic), `styles.css`, `app.html` (page template) |
 | `eval/` | Blind contract B, answer keys v1 and v2 with `FROZEN.sha256`, the raw live run and its score, `score.py` |
 | `tests/` | `e2e.py` (click-through checks), `messy.py` (malformed model output) |
 | `docs/` | Opener slides, demo guide, result PDFs, screenshots |

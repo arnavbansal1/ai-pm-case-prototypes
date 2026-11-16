@@ -4,7 +4,8 @@ Builds one trusted set of renewal facts from five sources that disagree. Rules d
 
 | Folder | Contents |
 |---|---|
-| `app/` | The prototype (`index.html`) and its build (`body.html`, `content.py`, `build.py`) |
+| `app/` | The prototype (`index.html`, built) and its build (`build.py`, `content.py`) |
+| `app/src/` | Source: `app.js` (logic), `styles.css`, `app.html` (page template) |
 | `case/` | Demo and blind sources and keys with `FROZEN.sha256` |
 | `tests/` | `engine_test.py` (keys + adversarial cases), `ui_test.py` (23 checks), `eval_display_test.py` |
 | `docs/` | Opener slides, framing, demo guide, results, screenshots |

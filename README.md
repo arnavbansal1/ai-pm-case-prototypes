@@ -115,7 +115,7 @@ Evidence: [results and fix](03-renewal-reconciliation/docs/handoff_results.md) Â
 
 ## Run it
 
-Each app is one self-contained `index.html`. Open it in a browser and click **use saved sample** (the live "Run with Claude" button needs the hosted environment the apps were built in).
+Each app is one self-contained `index.html`, built from the source files beside it (`app/src/` holds the script, stylesheet and page template; case 2 keeps them as `app.js`, `base_style.css` and `body.html`). To rebuild case 1 or 3, run `python3 <case>/app/build.py`. Open it in a browser and click **use saved sample** (the live "Run with Claude" button needs the hosted environment the apps were built in).
 
 ```bash
 pip install playwright        # tests drive Chrome through Playwright

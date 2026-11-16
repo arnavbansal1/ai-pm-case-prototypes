@@ -14,7 +14,12 @@ saved = {"dev": sv, "blind": None}
 block = (f"const DATA={json.dumps(data)};\nconst KEYS={json.dumps(keys)};\n"
          f"const KEY_SHA={json.dumps({'blind': sha('blind_key_v1.json'), 'dev': sha('dev_key.json')})};\n"
          f"const SAVED={json.dumps(saved)};\nconst SAVED_HELD={json.dumps({'dev': held})};\nconst HOW_HTML={json.dumps(HOW_HTML)};\nconst PROD_HTML={json.dumps(PROD_HTML)};\n")
-body = pathlib.Path(ROOT / 'app/body.html').read_text()
+def assemble(src):
+    """Put the page back together from its source parts: template + stylesheet + script."""
+    return ((src/'app.html').read_text()
+            .replace('/*__STYLES__*/', (src/'styles.css').read_text().rstrip('\n'))
+            .replace('/*__SCRIPT__*/', (src/'app.js').read_text().rstrip('\n')))
+body = assemble(ROOT / 'app' / 'src')
 out = body.replace('/*__DATA__*/', block)
 pathlib.Path(ROOT / 'app/index.html').write_text(out)
 print('built', len(out), 'bytes; blind key sha', sha('blind_key_v1.json')[:12])

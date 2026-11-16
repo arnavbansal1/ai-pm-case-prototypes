@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Renewal Reconciliation Workbench</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/*__STYLES__*/
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">RR</div><div><h1>Renewal Reconciliation Workbench</h1><div class="sub">Claude reads the documents · rules decide what is safe to settle · the advisor resolves the rest</div></div></div>
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Client"><button id="dsDev" class="on">Demo client</button><button id="dsBlind">Blind test client</button></div>
+    <div class="seg" role="group" aria-label="Extraction"><button id="mSaved" class="on">Saved run</button><button id="mLive">Live Claude</button></div>
+    <button id="runBtn" class="btn primary">Run reconciliation</button>
+    <button id="run3Btn" class="btn" title="Three independent live runs, cache off">Run 3× live</button>
+    <button id="stopBtn" class="btn" hidden>Stop</button>
+    <button id="pauseBtn" class="btn" title="Kill switch: stop the rules from settling anything automatically. Every field goes to the advisor.">Pause auto-settle</button>
+  </div>
+</header>
+<div class="status" id="status">Loading…</div>
+<div id="pauseBanner" class="pause-banner" hidden></div>
+<div class="client" id="client"></div>
+<div class="bar">
+  <div class="chips" id="chips"></div>
+  <div class="ready-box">
+    <div class="prog" id="prog"></div>
+    <button class="btn" id="readyBtn" disabled>Ready to market</button>
+  </div>
+</div>
+<main>
+  <section class="panel"><h2><span>Renewal facts · last year vs this year</span><span id="tblNote" style="text-transform:none;letter-spacing:0;font-weight:500"></span></h2><div class="scroll"><table class="ftab" id="ftab"></table></div></section>
+  <section class="panel"><h2>Field decision</h2><div class="scroll"><div class="detail" id="detail"><div class="empty">Select a field.</div></div></div></section>
+  <section class="panel"><h2>Source documents</h2><div class="tabs" id="tabs"></div><div class="scroll"><div class="docs" id="docs"></div></div></section>
+</main>
+<details class="box" id="evalBox" open><summary>Eval · rules' routing vs frozen answer key<span class="sm" id="evalSm"></span></summary><div class="pbody" id="evalBody"></div></details>
+<details class="box" id="fuBox"><summary>Client follow-ups <span class="sm">drafted from open conflicts and missing items</span></summary><div class="pbody" id="fuBody"></div></details>
+<details class="box"><summary>Raw AI output <span class="sm">exactly what Claude returned</span></summary><div class="pbody"><div id="probs"></div><pre class="raw" id="raw">No run yet.</pre></div></details>
+<details class="box"><summary>Run log</summary><div class="pbody" id="logBody"></div></details>
+<details class="box"><summary>How it works and what we learned</summary><div class="pbody" id="howBody"></div></details>
+<details class="box"><summary>Path to production <span class="sm">AI SDLC · architecture review (ARB) · CI/CD and DevOps · QA · change approval (CAB)</span></summary><div class="pbody" id="prodBody"></div></details>
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<footer>Prototype for discussion. Clients, documents, policies and contacts are fictional. Claude only extracts evidence with exact quotes; statuses, values and the Ready-to-market gate are computed by the rules in this page; the advisor makes every judgment call.</footer>
+<script>
+/*__SCRIPT__*/
+</script>
+</body>
+</html>

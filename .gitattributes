@@ -1,0 +1,5 @@
+# Built pages are generated from the sources next to them
+01-contract-insurance-review/app/index.html linguist-generated=true
+02-client-data-onboarding/app/index.html linguist-generated=true
+03-renewal-reconciliation/app/index.html linguist-generated=true
+*/docs/** linguist-documentation=true
