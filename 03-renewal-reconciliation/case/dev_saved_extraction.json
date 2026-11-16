@@ -1,0 +1,233 @@
+{
+  "observations": [
+    {
+      "doc": "prior_policy",
+      "field": "policy_number",
+      "location": null,
+      "value": "CPP-3390417",
+      "period": "unstated",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Policy number: CPP-3390417"
+    },
+    {
+      "doc": "prior_policy",
+      "field": "named_insured",
+      "location": null,
+      "value": "Meridian Freight & Storage, Inc.",
+      "period": "unstated",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Named insured: Meridian Freight & Storage, Inc."
+    },
+    {
+      "doc": "prior_policy",
+      "field": "employees",
+      "location": "Indianapolis",
+      "value": 60,
+      "period": "point_in_time",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Loc 1: 4100 W Raymond St, Indianapolis IN | Warehouse | Employees: 60 | Annual payroll: $3,250,000"
+    },
+    {
+      "doc": "prior_policy",
+      "field": "payroll",
+      "location": "Indianapolis",
+      "value": 3250000,
+      "period": "annual",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Loc 1: 4100 W Raymond St, Indianapolis IN | Warehouse | Employees: 60 | Annual payroll: $3,250,000"
+    },
+    {
+      "doc": "prior_policy",
+      "field": "employees",
+      "location": "Fort Wayne",
+      "value": 38,
+      "period": "point_in_time",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Loc 2: 720 Ludwig Rd, Fort Wayne IN | Warehouse | Employees: 38 | Annual payroll: $1,580,000"
+    },
+    {
+      "doc": "prior_policy",
+      "field": "payroll",
+      "location": "Fort Wayne",
+      "value": 1580000,
+      "period": "annual",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Loc 2: 720 Ludwig Rd, Fort Wayne IN | Warehouse | Employees: 38 | Annual payroll: $1,580,000"
+    },
+    {
+      "doc": "prior_policy",
+      "field": "employees",
+      "location": "Carmel",
+      "value": 18,
+      "period": "point_in_time",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Loc 3: 11 Monument Cir, Carmel IN | Office | Employees: 18 | Annual payroll: $1,270,000"
+    },
+    {
+      "doc": "prior_policy",
+      "field": "payroll",
+      "location": "Carmel",
+      "value": 1270000,
+      "period": "annual",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Loc 3: 11 Monument Cir, Carmel IN | Office | Employees: 18 | Annual payroll: $1,270,000"
+    },
+    {
+      "doc": "prior_policy",
+      "field": "payroll",
+      "location": null,
+      "value": 6100000,
+      "period": "annual",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Total annual payroll: $6,100,000"
+    },
+    {
+      "doc": "prior_policy",
+      "field": "employees",
+      "location": null,
+      "value": 116,
+      "period": "point_in_time",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Total employees: 116"
+    },
+    {
+      "doc": "prior_policy",
+      "field": "annual_revenue",
+      "location": null,
+      "value": 50000000,
+      "period": "annual",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Reported annual revenue (informational, not rated): $50,000,000"
+    },
+    {
+      "doc": "prior_policy",
+      "field": "power_units",
+      "location": null,
+      "value": 20,
+      "period": "point_in_time",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Scheduled power units: 20"
+    },
+    {
+      "doc": "email_2",
+      "field": "payroll",
+      "location": "Fort Wayne",
+      "value": 1640000,
+      "period": "annual",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "Fort Wayne payroll should be $1,640,000 for the year, not $1,460,000"
+    },
+    {
+      "doc": "email_3",
+      "field": "employees",
+      "location": "Indianapolis",
+      "value": 70,
+      "period": "point_in_time",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "our headcount at Indianapolis is now 70"
+    },
+    {
+      "doc": "email_4",
+      "field": "power_units",
+      "location": null,
+      "value": 22,
+      "period": "point_in_time",
+      "explicit": true,
+      "confidence": "high",
+      "quote": "we're at 22 power units, same as the file"
+    }
+  ],
+  "loss_lines": [
+    {
+      "doc": "loss_runs",
+      "line": "GL",
+      "valued": "2026-10-05",
+      "quote": "GENERAL LIABILITY (valued as of 10/05/2026)",
+      "claims": [
+        {
+          "id": "GL-25-0091",
+          "date_of_loss": "2025-04-02",
+          "status": "closed",
+          "incurred": 22400,
+          "quote": "Claim GL-25-0091 | Date of loss 04/02/2025 | Trip over pallet, Indianapolis | Closed | Incurred $22,400"
+        },
+        {
+          "id": "GL-26-0317",
+          "date_of_loss": "2026-05-18",
+          "status": "closed",
+          "incurred": 8200,
+          "quote": "Claim GL-26-0317 | Date of loss 05/18/2026 | Damaged customer freight | Closed | Incurred $8,200"
+        }
+      ]
+    },
+    {
+      "doc": "loss_runs",
+      "line": "WC",
+      "valued": "2026-06-30",
+      "quote": "WORKERS COMPENSATION (valued as of 06/30/2026)",
+      "claims": [
+        {
+          "id": "WC-26-0044",
+          "date_of_loss": "2026-02-11",
+          "status": "closed",
+          "incurred": 6900,
+          "quote": "Claim WC-26-0044 | Date of loss 02/11/2026 | Back strain, loading | Closed | Incurred $6,900"
+        }
+      ]
+    },
+    {
+      "doc": "loss_runs",
+      "line": "AUTO",
+      "valued": "2026-10-01",
+      "quote": "COMMERCIAL AUTO (valued as of 10/01/2026)",
+      "claims": [
+        {
+          "id": "CA-26-0508",
+          "date_of_loss": "2026-08-14",
+          "status": "open",
+          "incurred": 60000,
+          "quote": "Claim CA-26-0508 | Date of loss 08/14/2026 | Intersection collision, tractor 12 | Open | Incurred $60,000"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Email 1 is a cover note with no values. Email 3 comes from a shared accounts-payable mailbox."
+  ],
+  "held": {
+    "loss_runs_wc_update": {
+      "observations": [],
+      "loss_lines": [
+        {
+          "doc": "loss_runs_wc_update",
+          "line": "WC",
+          "valued": "2026-11-05",
+          "quote": "WORKERS COMPENSATION (valued as of 11/05/2026)",
+          "claims": [
+            {
+              "id": "WC-26-0044",
+              "date_of_loss": "2026-02-11",
+              "status": "closed",
+              "incurred": 6900,
+              "quote": "Claim WC-26-0044 | Date of loss 02/11/2026 | Back strain, loading | Closed | Incurred $6,900"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

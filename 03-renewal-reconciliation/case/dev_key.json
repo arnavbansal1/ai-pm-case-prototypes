@@ -1,0 +1,23 @@
+{
+  "version": "dev_v1",
+  "client": "Meridian Freight & Storage, Inc.",
+  "note": "Demo client key. Used while building; the blind key is the real test.",
+  "fields": {
+    "named_insured": {"trap": "internal wins", "expected_status": "Confirmed", "safe_alt": [], "must_review": false, "auto_value": "Meridian Freight & Storage, Inc.", "auto_source": "internal", "why": "Exposure file writes the name informally; internal data is the authority."},
+    "policy_number": {"trap": null, "expected_status": "Confirmed", "safe_alt": [], "must_review": false, "auto_value": "CPP-3390417", "auto_source": "internal", "why": "All agree."},
+    "annual_revenue": {"trap": "not rated", "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 61000000, "auto_source": "exposure", "why": "+22%; revenue is not a rating basis."},
+    "total_payroll": {"trap": "totals", "expected_status": "Conflict", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "After the Fort Wayne correction the locations sum to $7,580,000; the file total says $7,400,000."},
+    "total_employees": {"trap": "depends", "expected_status": "Conflict", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "Depends on Indianapolis headcount, which is unresolved."},
+    "power_units": {"trap": "corroborated", "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 22, "auto_source": "exposure", "why": "20 to 22 (+10%); fleet manager's email agrees with the file."},
+    "loc:Indianapolis:payroll": {"trap": null, "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 3400000, "auto_source": "exposure", "why": "+4.6%."},
+    "loc:Indianapolis:employees": {"trap": "authority", "expected_status": "Conflict", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "Newer email says 70, but the sender (Accounts Payable) is not an authorized contact."},
+    "loc:Fort Wayne:payroll": {"trap": "email supersedes", "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 1640000, "auto_source": "email_2", "why": "CFO, explicit annual figure, names Fort Wayne, newer, uncontradicted."},
+    "loc:Fort Wayne:employees": {"trap": null, "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 41, "auto_source": "exposure", "why": "38 to 41."},
+    "loc:Carmel:payroll": {"trap": null, "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 1300000, "auto_source": "exposure", "why": "+2.4%."},
+    "loc:Carmel:employees": {"trap": null, "expected_status": "Confirmed", "safe_alt": [], "must_review": false, "auto_value": 18, "auto_source": "exposure", "why": "Unchanged."},
+    "loc:Lafayette:schedule": {"trap": "new location", "expected_status": "Material change", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "New cross-dock location with forklift operations."},
+    "loss:GL": {"trap": null, "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 8200, "auto_source": "loss_runs", "why": "One closed claim under $50,000 this term."},
+    "loss:WC": {"trap": "stale", "expected_status": "Missing", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "WC loss runs valued 06/30/2026, more than 120 days before the 01/01/2027 renewal."},
+    "loss:AUTO": {"trap": null, "expected_status": "Material change", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "New open claim, $60,000 incurred."}
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "version": "blind_v1",
+  "client": "Lakeshore Distribution Co., LLC",
+  "note": "Written before any app code or model run. Scorer only; never sent to the model.",
+  "fields": {
+    "named_insured": {"trap": null, "expected_status": "Confirmed", "safe_alt": [], "must_review": false, "auto_value": "Lakeshore Distribution Co., LLC", "auto_source": "internal", "why": "All sources agree; internal data is the authority for policy metadata."},
+    "policy_number": {"trap": "T5", "expected_status": "Confirmed", "safe_alt": [], "must_review": false, "auto_value": "PKG-4471982", "auto_source": "internal", "why": "Exposure file shows PKG-4417982 (transposed); internal data is the authority for policy metadata and matches the prior policy."},
+    "annual_revenue": {"trap": "T4", "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 49400000, "auto_source": "exposure", "why": "+30% but revenue is not a rating basis for any line marketed (GL and WC rate on payroll, auto on power units)."},
+    "total_payroll": {"trap": "T3", "expected_status": "Material change", "safe_alt": ["Conflict"], "must_review": true, "material_flag": true, "auto_value": null, "auto_source": null, "why": "+18% is below the 25% threshold, but 91% of the increase is the new Akron cold-storage location. Conflict is a safe alternative because Columbus payroll is unresolved."},
+    "total_employees": {"trap": "T1", "expected_status": "Conflict", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "The Dayton correction applies to one location only; the file total (123) no longer equals the locations (130). Must not be silently replaced."},
+    "power_units": {"trap": "T2", "expected_status": "Conflict", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "Earlier email is explicit (18), newest email signals more trucks pending. Recency alone cannot settle it."},
+    "loc:Columbus:payroll": {"trap": "T7", "expected_status": "Conflict", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "Email states a monthly figure ($255,000 a month = $3,060,000 a year) against the file's annual $2,950,000. Period differs and values disagree."},
+    "loc:Columbus:employees": {"trap": null, "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 52, "auto_source": "exposure", "why": "50 to 52; headcount is not a rating basis; no newer evidence."},
+    "loc:Dayton:payroll": {"trap": null, "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 1900000, "auto_source": "exposure", "why": "+2.7%, below threshold; the email confirms wages are already included."},
+    "loc:Dayton:employees": {"trap": "T1", "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 42, "auto_source": "email_4", "why": "Authorized CFO, explicit value, names Dayton, newer than the file, nothing later contradicts it: all 5 conditions hold, so the email supersedes."},
+    "loc:Toledo:payroll": {"trap": null, "expected_status": "Confirmed", "safe_alt": [], "must_review": false, "auto_value": 1450000, "auto_source": "exposure", "why": "Unchanged."},
+    "loc:Toledo:employees": {"trap": null, "expected_status": "Confirmed", "safe_alt": [], "must_review": false, "auto_value": 14, "auto_source": "exposure", "why": "Unchanged."},
+    "loc:Akron:schedule": {"trap": "T6", "expected_status": "Material change", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "New location in the exposure file, absent from the prior policy and internal data; cold storage with forklift operations."},
+    "loss:GL": {"trap": null, "expected_status": "Minor change", "safe_alt": [], "must_review": false, "auto_value": 12500, "auto_source": "loss_runs", "why": "One new closed claim under $50,000 this term."},
+    "loss:AUTO": {"trap": null, "expected_status": "Material change", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "New open claim, $85,000 incurred."},
+    "loss:WC": {"trap": "T8", "expected_status": "Missing", "safe_alt": [], "must_review": true, "auto_value": null, "auto_source": null, "why": "Workers comp is marketed but no WC loss runs were provided. Ready to market must stay blocked."}
+  },
+  "gate": {"ready_blocked_while_unresolved": ["total_payroll", "total_employees", "power_units", "loc:Columbus:payroll", "loc:Akron:schedule", "loss:AUTO", "loss:WC"], "missing_cannot_be_cleared_without_document": ["loss:WC"]}
+}

@@ -1,0 +1,55 @@
+{
+  "contract_id": "contract-b",
+  "note": "Blind answer key. Written before any extraction run on contract B. Never included in the extraction prompt. Do not edit after model output is seen.",
+  "evaluated_against_coverage": "Brightline Facility Services sample coverage (same COVERAGE object as the app)",
+  "in_scope_requirements": [
+    { "key": "GL limit (conflict: 12.2(a) vs D.2)", "type": "limit", "line": "cgl",
+      "refs": ["12.2(a)", "D.2"],
+      "anchor": "commercial general liability insurance with limits of not less than $2,000,000 per occurrence and $4,000,000 general aggregate",
+      "governing_values": { "per_occurrence": 2000000, "aggregate": 4000000 },
+      "test": "Conflict. 1.3 says the more stringent requirement governs, so D.2 ($2M/$4M) controls over 12.2(a) ($1M/$2M).",
+      "pass": "A cgl limit requirement with the $2M/$4M values (from D.2), or both clauses surfaced with the conflict flagged.",
+      "fail": "Only $1M/$2M extracted, which would wrongly come out Met.",
+      "correct_status": ["review"], "acceptable_status": ["review", "gap"] },
+    { "key": "Additional insured (ambiguous scope)", "type": "additional_insured",
+      "refs": ["12.4"],
+      "anchor": "shall be included as additional insureds under Subcontractor’s commercial general liability policy with respect to liability arising out of Subcontractor’s work",
+      "test": "Ambiguous. 'Arising out of Subcontractor's work' doesn't say ongoing vs. completed operations.",
+      "pass": "Extracted, with the ambiguity preserved (confidence medium/low) so it lands in Needs review.",
+      "fail": "Scope confidently set to ongoing only with high confidence, which would wrongly come out Met.",
+      "correct_status": ["review"], "acceptable_status": ["review", "gap"] },
+    { "key": "Waiver of subrogation (outside insurance section)", "type": "waiver_of_subrogation",
+      "refs": ["10.3"],
+      "anchor": "shall obtain endorsements from its insurers waiving subrogation in favor of Contractor and Owner on each of those policies",
+      "values": { "lines": ["cgl", "auto", "wc"] },
+      "test": "Lives in 10 Risk of Loss, not 12 Insurance.",
+      "correct_status": ["met"], "acceptable_status": ["met", "review"] },
+    { "key": "Primary and non-contributory", "type": "primary_noncontributory",
+      "refs": ["12.5"],
+      "anchor": "Subcontractor’s insurance shall be primary and non-contributory with respect to any insurance maintained by Contractor or Owner.",
+      "correct_status": ["review"], "acceptable_status": ["review"] }
+  ],
+  "out_of_scope_requirements_must_be_surfaced": [
+    { "key": "Contractor's pollution liability (unsupported type)", "refs": ["12.2(d)"], "anchor": "Contractor’s pollution liability insurance with limits of not less than $2,000,000 per occurrence",
+      "test": "No comparison rule exists for pollution liability. Must not be silently dropped." },
+    { "key": "Business auto", "refs": ["12.2(b)"], "anchor": "Business automobile liability insurance with a combined single limit of not less than $1,000,000 per accident." },
+    { "key": "Workers' comp / employer's liability", "refs": ["12.2(c)"], "anchor": "employer’s liability insurance with limits of not less than $1,000,000 each accident" },
+    { "key": "Certificates and endorsement copies", "refs": ["12.6"], "anchor": "Subcontractor shall furnish certificates of insurance and copies of the required endorsements to Contractor before starting work." },
+    { "key": "30-day notice of cancellation", "refs": ["12.7"], "anchor": "at least thirty (30) days’ prior written notice of cancellation" }
+  ],
+  "contract_terms": { "excess_allowed": { "allowed": true, "condition": "none or other (no follow-form condition stated)", "refs": ["12.3"] } },
+  "external_references": [
+    { "key": "Owner Controlled Insurance Program Manual (not provided)", "refs": ["12.8"], "anchor": "Owner Controlled Insurance Program Manual issued by Owner, which is incorporated into this Agreement by reference" }
+  ],
+  "false_positive_traps": [
+    { "key": "Equipment floater is recommended, not required", "refs": ["6.2"], "anchor": "Contractor recommends, but does not require",
+      "fail": "Appears as a requirement (in requirements or out_of_scope)." }
+  ],
+  "not_external": "Exhibits A-D are attached per 1.2, so they are NOT missing external documents. Flagging them as missing counts as an extra.",
+  "scoring": {
+    "FOUND": "Each in-scope requirement matched by type (+ line for limits). Each out-of-scope requirement matched by ref appearing in out_of_scope or requirements.",
+    "MISSED": "Any key item not matched.",
+    "EXTRA": "Any extracted requirement or external reference that matches no key item, including the 6.2 trap.",
+    "quality checks": "quote verified word-for-word; ref correct; values; status within acceptable_status; conflict and ambiguity handled per pass/fail notes."
+  }
+}

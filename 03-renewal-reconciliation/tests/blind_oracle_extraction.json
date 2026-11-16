@@ -1,0 +1,31 @@
+{
+  "observations": [
+    {"doc": "prior_policy", "field": "policy_number", "location": null, "value": "PKG-4471982", "period": "unstated", "explicit": true, "confidence": "high", "quote": "Policy number: PKG-4471982"},
+    {"doc": "prior_policy", "field": "named_insured", "location": null, "value": "Lakeshore Distribution Co., LLC", "period": "unstated", "explicit": true, "confidence": "high", "quote": "Named insured: Lakeshore Distribution Co., LLC"},
+    {"doc": "prior_policy", "field": "employees", "location": "Columbus", "value": 50, "period": "point_in_time", "explicit": true, "confidence": "high", "quote": "Loc 1: 1200 Harmon Rd, Columbus OH | Warehouse | Employees: 50 | Annual payroll: $2,900,000"},
+    {"doc": "prior_policy", "field": "payroll", "location": "Columbus", "value": 2900000, "period": "annual", "explicit": true, "confidence": "high", "quote": "Loc 1: 1200 Harmon Rd, Columbus OH | Warehouse | Employees: 50 | Annual payroll: $2,900,000"},
+    {"doc": "prior_policy", "field": "employees", "location": "Dayton", "value": 33, "period": "point_in_time", "explicit": true, "confidence": "high", "quote": "Loc 2: 455 Wayne Ave, Dayton OH | Warehouse | Employees: 33 | Annual payroll: $1,850,000"},
+    {"doc": "prior_policy", "field": "payroll", "location": "Dayton", "value": 1850000, "period": "annual", "explicit": true, "confidence": "high", "quote": "Loc 2: 455 Wayne Ave, Dayton OH | Warehouse | Employees: 33 | Annual payroll: $1,850,000"},
+    {"doc": "prior_policy", "field": "employees", "location": "Toledo", "value": 14, "period": "point_in_time", "explicit": true, "confidence": "high", "quote": "Loc 3: 88 Summit St, Toledo OH | Office | Employees: 14 | Annual payroll: $1,450,000"},
+    {"doc": "prior_policy", "field": "payroll", "location": "Toledo", "value": 1450000, "period": "annual", "explicit": true, "confidence": "high", "quote": "Loc 3: 88 Summit St, Toledo OH | Office | Employees: 14 | Annual payroll: $1,450,000"},
+    {"doc": "prior_policy", "field": "payroll", "location": null, "value": 6200000, "period": "annual", "explicit": true, "confidence": "high", "quote": "Total annual payroll: $6,200,000"},
+    {"doc": "prior_policy", "field": "employees", "location": null, "value": 97, "period": "point_in_time", "explicit": true, "confidence": "high", "quote": "Total employees: 97"},
+    {"doc": "prior_policy", "field": "annual_revenue", "location": null, "value": 38000000, "period": "annual", "explicit": true, "confidence": "high", "quote": "Reported annual revenue (informational, not rated): $38,000,000"},
+    {"doc": "prior_policy", "field": "power_units", "location": null, "value": 14, "period": "point_in_time", "explicit": true, "confidence": "high", "quote": "Scheduled power units: 14"},
+    {"doc": "email_2", "field": "payroll", "location": "Columbus", "value": 255000, "period": "monthly", "explicit": true, "confidence": "high", "quote": "Columbus payroll is running about $255,000 a month now"},
+    {"doc": "email_3", "field": "power_units", "location": null, "value": 18, "period": "point_in_time", "explicit": true, "confidence": "high", "quote": "we now run 18 power units"},
+    {"doc": "email_4", "field": "employees", "location": "Dayton", "value": 42, "period": "point_in_time", "explicit": true, "confidence": "high", "quote": "Dayton headcount is 42, not 35"},
+    {"doc": "email_5", "field": "power_units", "location": null, "value": null, "period": "point_in_time", "explicit": false, "confidence": "medium", "quote": "we may be adding a couple more trucks before January"}
+  ],
+  "loss_lines": [
+    {"doc": "loss_runs", "line": "GL", "valued": "2026-10-01", "quote": "Valued as of: 10/01/2026", "claims": [
+      {"id": "GL-22-0187", "date_of_loss": "2022-03-14", "status": "closed", "incurred": 41200, "quote": "Claim GL-22-0187 | Date of loss 03/14/2022 | Slip and fall, Columbus dock | Closed | Incurred $41,200"},
+      {"id": "GL-26-0412", "date_of_loss": "2026-06-09", "status": "closed", "incurred": 12500, "quote": "Claim GL-26-0412 | Date of loss 06/09/2026 | Customer property damaged during unloading | Closed | Incurred $12,500"}
+    ]},
+    {"doc": "loss_runs", "line": "AUTO", "valued": "2026-10-01", "quote": "Valued as of: 10/01/2026", "claims": [
+      {"id": "CA-24-1150", "date_of_loss": "2024-08-22", "status": "closed", "incurred": 9800, "quote": "Claim CA-24-1150 | Date of loss 08/22/2024 | Backing collision | Closed | Incurred $9,800"},
+      {"id": "CA-26-0931", "date_of_loss": "2026-07-30", "status": "open", "incurred": 85000, "quote": "Claim CA-26-0931 | Date of loss 07/30/2026 | Rear-end collision, tractor 7 | Open | Incurred $85,000"}
+    ]}
+  ],
+  "notes": ["No workers compensation section in the loss runs."]
+}

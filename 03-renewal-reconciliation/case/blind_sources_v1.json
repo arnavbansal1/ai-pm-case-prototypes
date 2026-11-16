@@ -1,0 +1,70 @@
+{
+  "id": "blind",
+  "label": "Lakeshore Distribution (blind test)",
+  "internal": {
+    "system": "Agency management system export",
+    "named_insured": "Lakeshore Distribution Co., LLC",
+    "policy_number": "PKG-4471982",
+    "policy_period": "01/01/2026 to 01/01/2027",
+    "period_start": "2026-01-01",
+    "renewal_effective": "2027-01-01",
+    "insurer": "Great Lakes Mutual Insurance Co.",
+    "account_manager": "Priya Shah",
+    "lines": ["GL", "WC", "AUTO"],
+    "rating_bases": {"GL": "payroll", "WC": "payroll", "AUTO": "power_units"},
+    "locations": ["Columbus", "Dayton", "Toledo"],
+    "contacts": [
+      {"name": "Dana Whitfield", "email": "dana.whitfield@lakeshoredist.com", "role": "CFO", "authorized_for": ["all"]},
+      {"name": "Marcus Lee", "email": "marcus.lee@lakeshoredist.com", "role": "Operations Manager", "authorized_for": ["power_units"]}
+    ]
+  },
+  "exposure": {
+    "file": "Lakeshore_Exposures_2027.xlsx",
+    "prepared_by": "Dana Whitfield",
+    "date": "2026-10-15",
+    "header": {
+      "named_insured": "Lakeshore Distribution Co., LLC",
+      "policy_number": "PKG-4417982",
+      "annual_revenue": 49400000,
+      "power_units": 16,
+      "total_payroll": 7316000,
+      "total_employees": 123
+    },
+    "rows": [
+      {"loc": "Columbus", "address": "1200 Harmon Rd, Columbus OH", "operations": "Warehouse", "employees": 52, "payroll": 2950000},
+      {"loc": "Dayton", "address": "455 Wayne Ave, Dayton OH", "operations": "Warehouse", "employees": 35, "payroll": 1900000},
+      {"loc": "Toledo", "address": "88 Summit St, Toledo OH", "operations": "Office", "employees": 14, "payroll": 1450000},
+      {"loc": "Akron", "address": "2100 Ridge Pkwy, Akron OH", "operations": "Cold storage, forklift operations", "employees": 22, "payroll": 1016000}
+    ]
+  },
+  "docs": {
+    "prior_policy": {
+      "title": "Prior-year policy (declarations excerpt)",
+      "text": "COMMERCIAL PACKAGE POLICY: DECLARATIONS (EXCERPT)\nPolicy number: PKG-4471982\nNamed insured: Lakeshore Distribution Co., LLC\nPolicy period: 01/01/2026 to 01/01/2027\nInsurer: Great Lakes Mutual Insurance Co.\n\nSCHEDULE OF LOCATIONS\nLoc 1: 1200 Harmon Rd, Columbus OH | Warehouse | Employees: 50 | Annual payroll: $2,900,000\nLoc 2: 455 Wayne Ave, Dayton OH | Warehouse | Employees: 33 | Annual payroll: $1,850,000\nLoc 3: 88 Summit St, Toledo OH | Office | Employees: 14 | Annual payroll: $1,450,000\n\nGENERAL LIABILITY RATING BASIS\nTotal annual payroll: $6,200,000\nTotal employees: 97\nReported annual revenue (informational, not rated): $38,000,000\n\nCOMMERCIAL AUTO\nScheduled power units: 14"
+    },
+    "loss_runs": {
+      "title": "Loss runs",
+      "text": "LOSS RUN REPORT: Great Lakes Mutual Insurance Co.\nInsured: Lakeshore Distribution Co., LLC\nValued as of: 10/01/2026\nPeriod covered: 01/01/2022 to 10/01/2026\n\nGENERAL LIABILITY\nClaim GL-22-0187 | Date of loss 03/14/2022 | Slip and fall, Columbus dock | Closed | Incurred $41,200\nClaim GL-26-0412 | Date of loss 06/09/2026 | Customer property damaged during unloading | Closed | Incurred $12,500\n\nCOMMERCIAL AUTO\nClaim CA-24-1150 | Date of loss 08/22/2024 | Backing collision | Closed | Incurred $9,800\nClaim CA-26-0931 | Date of loss 07/30/2026 | Rear-end collision, tractor 7 | Open | Incurred $85,000\n\nEnd of report. Lines included: General Liability, Commercial Auto."
+    },
+    "email_1": {
+      "title": "Email: Renewal exposure file",
+      "text": "From: Dana Whitfield <dana.whitfield@lakeshoredist.com>\nDate: 10/15/2026\nSubject: Renewal exposure file\n\nHi Priya, attached is our updated exposure file for the January renewal, with payroll and headcount by location. Our loss runs from Great Lakes Mutual are attached too. Our Akron cold-storage site opened in March. Thanks, Dana"
+    },
+    "email_2": {
+      "title": "Email: Columbus payroll",
+      "text": "From: Dana Whitfield <dana.whitfield@lakeshoredist.com>\nDate: 10/27/2026\nSubject: Columbus payroll\n\nPriya, quick note: after the October raises, Columbus payroll is running about $255,000 a month now. Dana"
+    },
+    "email_3": {
+      "title": "Email: Fleet update",
+      "text": "From: Marcus Lee <marcus.lee@lakeshoredist.com>\nDate: 10/28/2026\nSubject: Fleet update\n\nHi Priya, we now run 18 power units. Two new tractors were delivered last week. Marcus"
+    },
+    "email_4": {
+      "title": "Email: Correction to exposure file",
+      "text": "From: Dana Whitfield <dana.whitfield@lakeshoredist.com>\nDate: 11/02/2026\nSubject: Correction to exposure file\n\nPriya, one correction to the exposure file: Dayton headcount is 42, not 35. The file left out our part-time staff; their wages are already in the Dayton payroll figure. Dana"
+    },
+    "email_5": {
+      "title": "Email: Re: Fleet update",
+      "text": "From: Marcus Lee <marcus.lee@lakeshoredist.com>\nDate: 11/09/2026\nSubject: Re: Fleet update\n\nHeads up, we may be adding a couple more trucks before January. I'll confirm once the purchase is approved. Marcus"
+    }
+  }
+}

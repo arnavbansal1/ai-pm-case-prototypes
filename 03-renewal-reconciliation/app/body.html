@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Renewal Reconciliation Workbench</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F4F0;--card:#FFFFFF;--ink:#16213A;--muted:#5B6476;--line:#E1E2DB;--soft:#EEEFE9;--accent:#2D4FD6;--accentSoft:#E6EBFD;
+--ok:#0B7A4B;--okSoft:#DDF3E8;--minor:#1E6091;--minorSoft:#E0EEF8;--mat:#A4510B;--matSoft:#FDEBD7;--bad:#B4231A;--badSoft:#FCE3E0;--miss:#5B3FA6;--missSoft:#ECE6FA;--mark:#FFE58F;--markOn:#FFC53D}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14.5px/1.5 Inter,system-ui,sans-serif}
+button,input,textarea,select{font:inherit;color:inherit}
+header{padding:16px 22px 8px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;justify-content:space-between}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:38px;height:38px;border-radius:10px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px}
+h1{font-size:19px;margin:0;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:12.5px;margin-top:1px}
+.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:transparent;padding:7px 11px;cursor:pointer;font-weight:600;font-size:13px}
+.seg button.on{background:var(--accentSoft);color:var(--accent)}
+.seg button:disabled{opacity:.45;cursor:default}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:7px 12px;cursor:pointer;font-weight:600;font-size:13.5px}
+.btn:hover:not(:disabled){border-color:#C9CBC2}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ready{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.sm{padding:5px 10px;font-size:12.5px}
+.status{font-size:12.5px;color:var(--muted);padding:0 22px;min-height:19px}
+.status.err{color:var(--bad)}
+.client{display:flex;flex-wrap:wrap;gap:6px 18px;padding:4px 22px 10px;font-size:13px;color:var(--muted)}
+.client b{color:var(--ink);font-weight:600}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:0 22px 12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:4px 11px;font-size:12.5px;font-weight:600;background:var(--card);cursor:pointer;white-space:nowrap}
+.chip.on{outline:2px solid var(--accent);outline-offset:1px}
+.ready-box{display:flex;align-items:center;gap:12px}
+.prog{font-size:12.5px;color:var(--muted);text-align:right}
+.prog b{color:var(--ink)}
+.pbar{width:150px;height:6px;border-radius:9px;background:var(--soft);overflow:hidden;margin-top:4px}
+.pbar i{display:block;height:100%;background:var(--ok)}
+main{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr) minmax(0,.95fr);gap:12px;padding:0 22px 12px}
+@media (max-width:1180px){main{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;min-width:0;display:flex;flex-direction:column}
+.panel>h2{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:0;padding:12px 14px 8px;display:flex;justify-content:space-between;align-items:center}
+.scroll{overflow:auto;max-height:calc(100vh - 250px);min-height:420px}
+table{border-collapse:collapse;width:100%}
+.ftab th{position:sticky;top:0;background:var(--card);z-index:1;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);font-weight:700}
+.ftab td{padding:8px 10px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
+.ftab tr.sec td{background:var(--soft);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding:6px 10px}
+.ftab tr.row{cursor:pointer}
+.ftab tr.row:hover td{background:#FAFAF7}
+.ftab tr.row.sel td{background:var(--accentSoft)}
+.ftab td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ftab td.txt{white-space:normal;font-size:12.5px;max-width:150px}
+.ftab .fl{font-weight:600;min-width:150px}
+.ftab .fs{font-size:12px;color:var(--muted)}
+.delta{font-size:12px;color:var(--muted);white-space:nowrap}
+.delta.up{color:var(--mat)}
+.pill{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;white-space:nowrap}
+.s-Confirmed{background:var(--okSoft);color:var(--ok)}
+.s-Minor{background:var(--minorSoft);color:var(--minor)}
+.s-Material{background:var(--matSoft);color:var(--mat)}
+.s-Conflict{background:var(--badSoft);color:var(--bad)}
+.s-Missing{background:var(--missSoft);color:var(--miss)}
+.s-Resolved{background:var(--okSoft);color:var(--ok)}
+.tick{font-size:11.5px;color:var(--ok);font-weight:700;margin-top:3px}
+.need{font-size:11.5px;color:var(--bad);font-weight:700;margin-top:3px}
+.detail{padding:4px 16px 16px}
+.dtitle{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.dtitle h3{margin:0;font-size:17px}
+.final{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0;background:#FBFBF8}
+.final .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.final .src{font-size:12.5px;color:var(--muted)}
+.why{font-size:13.5px;margin:6px 0 10px}
+.lab{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:14px 0 6px;font-weight:700}
+.ev{width:100%;font-size:13px}
+.ev td,.ev th{padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+.ev th{font-size:11.5px;color:var(--muted);font-weight:700}
+.ev tr.clk{cursor:pointer}
+.ev tr.clk:hover td{background:#FAFAF7}
+.q{font-size:12.5px;color:var(--muted);border-left:3px solid var(--mark);padding-left:7px;margin-top:3px}
+.q.bad{border-left-color:var(--bad);color:var(--bad)}
+.vf{font-size:11px;font-weight:700;color:var(--ok)}
+.vf.no{color:var(--bad)}
+.checks{border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin:6px 0}
+.checks .ch{display:grid;grid-template-columns:20px 112px 1fr;gap:6px;font-size:13px;padding:3px 0}
+.checks .ok{color:var(--ok);font-weight:700}.checks .no{color:var(--bad);font-weight:700}
+.checks .hd{font-size:12.5px;font-weight:700;margin-bottom:3px}
+.note{font-size:12.5px;color:var(--muted)}
+.sugg{background:var(--accentSoft);border-radius:10px;padding:8px 10px;font-size:13px;margin:6px 0}
+.act{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}
+.act label.opt{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:13.5px;cursor:pointer}
+.act textarea,.act input[type=text]{width:100%;border:1px solid var(--line);border-radius:8px;padding:7px 9px;background:#FFF}
+.act textarea{min-height:56px;resize:vertical}
+.row-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.decided{background:var(--okSoft);border-radius:10px;padding:8px 10px;font-size:13px;margin-top:10px}
+details.trace{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+details.trace summary{cursor:pointer;font-weight:600;font-size:13px}
+.step{display:grid;grid-template-columns:26px 1fr;gap:6px;margin-top:8px;font-size:13px}
+.step .n{width:22px;height:22px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:11.5px;font-weight:700}
+.docs{padding:0 14px 14px}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;padding:0 14px 8px}
+.tab{border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:12.5px;font-weight:600;cursor:pointer;background:var(--card)}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tab .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--markOn);margin-left:5px;vertical-align:1px}
+.doc{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.doc h4{margin:0;font-size:12.5px;padding:7px 11px;background:var(--soft);display:flex;justify-content:space-between;gap:8px}
+.doc pre{margin:0;padding:9px 11px;white-space:pre-wrap;font:13px/1.55 Inter,system-ui,sans-serif}
+.doc.missing{border-style:dashed;border-color:var(--miss)}
+.doc.missing p{margin:0;padding:9px 11px;color:var(--miss);font-size:13px}
+mark{background:var(--mark);border-radius:3px;padding:0 1px;color:inherit}
+mark.on{background:var(--markOn)}
+.xt{font-size:12.5px}
+.xt th,.xt td{border-bottom:1px solid var(--line);padding:5px 7px;text-align:left}
+.xt th{background:#FAFAF7;font-weight:700;color:var(--muted)}
+.xt td.hl{background:var(--mark)}
+.xt td.hl.on{background:var(--markOn)}
+.kv{font-size:12.5px}
+.kv td{padding:4px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.kv td:first-child{color:var(--muted);width:42%}
+details.box{margin:0 22px 12px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+details.box>summary{cursor:pointer;padding:12px 14px;font-weight:700;font-size:14px}
+details.box>summary .sm{font-weight:500;color:var(--muted);font-size:12.5px;margin-left:6px}
+.pbody{padding:0 14px 14px;font-size:13.5px}
+.kpis{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-width:148px}
+.kpi .n{font-size:21px;font-weight:700}
+.kpi .l{font-size:12px;color:var(--muted)}
+.pass{color:var(--ok);font-weight:700}.fail{color:var(--bad);font-weight:700}.warn{color:var(--mat);font-weight:700}
+.sc{font-size:12.5px}
+.sc th,.sc td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left;vertical-align:top}
+.sc th{color:var(--muted)}
+pre.raw{white-space:pre-wrap;font:12px/1.45 ui-monospace,Menlo,monospace;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;max-height:340px;overflow:auto}
+.modal{position:fixed;inset:0;background:rgba(22,33,58,.45);display:none;align-items:flex-start;justify-content:center;z-index:30;overflow:auto;padding:40px 16px}
+.modal.show{display:flex}
+.mbox{background:var(--card);border-radius:16px;max-width:980px;width:100%;padding:18px 20px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.mbox h3{margin:0 0 4px;font-size:18px}
+.empty{color:var(--muted);padding:18px 16px}
+footer{padding:4px 22px 26px;font-size:12px;color:var(--muted)}
+.fu li{margin-bottom:6px}
+.rtag{display:inline-block;border-radius:6px;padding:0 6px;font-size:11px;font-weight:700;margin-left:6px;vertical-align:1px;white-space:nowrap;cursor:help}
+.rt-proto{background:#FDF0D5;color:#8A5300}.rt-advisor{background:var(--accentSoft);color:var(--accent)}.rt-sor{background:var(--okSoft);color:var(--ok)}.rt-client,.rt-carrier{background:var(--soft);color:var(--muted)}
+.rules td,.rules th{border-bottom:1px solid var(--line);padding:5px 7px;text-align:left;font-size:12.5px;vertical-align:top}
+.pause-banner{margin:4px 22px 8px;background:var(--badSoft);color:var(--bad);border:1px solid #F3C2BC;border-radius:12px;padding:8px 12px;font-size:13px;font-weight:600}
+.btn.paused{background:var(--bad);border-color:var(--bad);color:#fff}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px}
+.pcard{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#FBFBF8}
+.pcard h4{margin:0 0 6px;font-size:14px}
+.pcard ul{margin:0;padding-left:18px}.pcard li{margin:3px 0;font-size:13px}
+.stages{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.stage{border:1px solid var(--line);border-radius:10px;padding:6px 9px;font-size:12.5px;background:var(--card)}
+.stage b{display:block;font-size:12px;color:var(--accent)}
+.stage.done{border-color:var(--ok);background:var(--okSoft)}
+.gates td,.gates th{border-bottom:1px solid var(--line);padding:5px 7px;text-align:left;font-size:12.5px;vertical-align:top}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">RR</div><div><h1>Renewal Reconciliation Workbench</h1><div class="sub">Claude reads the documents · rules decide what is safe to settle · the advisor resolves the rest</div></div></div>
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Client"><button id="dsDev" class="on">Demo client</button><button id="dsBlind">Blind test client</button></div>
+    <div class="seg" role="group" aria-label="Extraction"><button id="mSaved" class="on">Saved run</button><button id="mLive">Live Claude</button></div>
+    <button id="runBtn" class="btn primary">Run reconciliation</button>
+    <button id="run3Btn" class="btn" title="Three independent live runs, cache off">Run 3× live</button>
+    <button id="stopBtn" class="btn" hidden>Stop</button>
+    <button id="pauseBtn" class="btn" title="Kill switch: stop the rules from settling anything automatically. Every field goes to the advisor.">Pause auto-settle</button>
+  </div>
+</header>
+<div class="status" id="status">Loading…</div>
+<div id="pauseBanner" class="pause-banner" hidden></div>
+<div class="client" id="client"></div>
+<div class="bar">
+  <div class="chips" id="chips"></div>
+  <div class="ready-box">
+    <div class="prog" id="prog"></div>
+    <button class="btn" id="readyBtn" disabled>Ready to market</button>
+  </div>
+</div>
+<main>
+  <section class="panel"><h2><span>Renewal facts · last year vs this year</span><span id="tblNote" style="text-transform:none;letter-spacing:0;font-weight:500"></span></h2><div class="scroll"><table class="ftab" id="ftab"></table></div></section>
+  <section class="panel"><h2>Field decision</h2><div class="scroll"><div class="detail" id="detail"><div class="empty">Select a field.</div></div></div></section>
+  <section class="panel"><h2>Source documents</h2><div class="tabs" id="tabs"></div><div class="scroll"><div class="docs" id="docs"></div></div></section>
+</main>
+<details class="box" id="evalBox" open><summary>Eval · rules' routing vs frozen answer key<span class="sm" id="evalSm"></span></summary><div class="pbody" id="evalBody"></div></details>
+<details class="box" id="fuBox"><summary>Client follow-ups <span class="sm">drafted from open conflicts and missing items</span></summary><div class="pbody" id="fuBody"></div></details>
+<details class="box"><summary>Raw AI output <span class="sm">exactly what Claude returned</span></summary><div class="pbody"><div id="probs"></div><pre class="raw" id="raw">No run yet.</pre></div></details>
+<details class="box"><summary>Run log</summary><div class="pbody" id="logBody"></div></details>
+<details class="box"><summary>How it works and what we learned</summary><div class="pbody" id="howBody"></div></details>
+<details class="box"><summary>Path to production <span class="sm">AI SDLC · architecture review (ARB) · CI/CD and DevOps · QA · change approval (CAB)</span></summary><div class="pbody" id="prodBody"></div></details>
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<footer>Prototype for discussion. Clients, documents, policies and contacts are fictional. Claude only extracts evidence with exact quotes; statuses, values and the Ready-to-market gate are computed by the rules in this page; the advisor makes every judgment call.</footer>
+<script>
+"use strict";
+/*__DATA__*/
+/* ============================================================
+   1. Rules configuration (deterministic, visible)
+   ============================================================ */
+const RULES={materialPct:0.25,concentrationShare:0.5,largeClaim:50000,lossFreshDays:120};
+const RULE_SRC={proto:"Prototype default",client:"Client-configured",carrier:"Carrier-specific",advisor:"Advisor-configured",sor:"Verified system of record"};
+const RULE_META={
+ metaAuthority:{label:"Policy metadata: internal account data wins",src:"advisor",basis:"Stated by the account team in discovery"},
+ exposureAuthority:{label:"Current exposures: latest exposure file wins",src:"advisor",basis:"Stated by the account team in discovery"},
+ emailGate:{label:"Client email supersedes only if authority, field identity, scope and recency are clear and nothing contradicts it",src:"advisor",basis:"Stated in discovery; no-contradiction check added by us"},
+ contacts:{label:"Authorized client contacts",src:"sor",basis:"Internal account data (contacts and permissions)"},
+ ratingBases:{label:"Rating basis per line marketed",src:"sor",basis:"Internal account data (lines and rating bases)"},
+ materialPct:{label:"Rating-basis change of 25% or more is material",src:"proto",basis:"Assumption for the prototype; not supplied by the interviewer"},
+ concentration:{label:"50% or more of growth from new locations is material",src:"proto",basis:"Assumption for the prototype"},
+ newLocation:{label:"Any new location is material",src:"proto",basis:"Assumption for the prototype"},
+ lossFresh:{label:"Loss runs must be valued within 120 days of renewal",src:"proto",basis:"Assumption for the prototype; carriers' own requirements vary"},
+ largeClaim:{label:"A new open claim or a claim of $50,000 or more is material",src:"proto",basis:"Assumption for the prototype"},
+ nonRating:{label:"A change in a field that isn't a rating basis is minor",src:"proto",basis:"Assumption for the prototype"},
+ totals:{label:"Totals must equal their locations; a total can't be final while a location is open",src:"proto",basis:"Assumption for the prototype"},
+ missingHard:{label:"A missing document can't be overridden",src:"proto",basis:"Assumption for the prototype (team policy to confirm)"}
+};
+const ruleTag=k=>{const m=RULE_META[k];return m?`<span class="rtag rt-${m.src}" title="${m.basis}">${RULE_SRC[m.src]}</span>`:""};
+const FIELD_LABEL={named_insured:"Named insured",policy_number:"Policy number",annual_revenue:"Annual revenue",payroll:"Payroll",employees:"Employees",power_units:"Power units (fleet)"};
+const MONEY_FIELDS=new Set(["annual_revenue","payroll"]);
+const NUM_FIELDS=new Set(["annual_revenue","payroll","employees","power_units"]);
+const TEXT_FIELDS=new Set(["named_insured","policy_number"]);
+const LINE_NAME={GL:"General liability",WC:"Workers compensation",AUTO:"Commercial auto"};
+const LINE_HEADER={GL:/general\s+liability/i,WC:/workers'?\s*comp/i,AUTO:/commercial\s+auto|automobile|business\s+auto/i};
+const KEYWORDS={payroll:["payroll","wages","salaries","salary"],employees:["headcount","employees","employee","staff","fte","people","workers"],power_units:["power units","power unit","tractors","tractor","trucks","truck","vehicles","vehicle","fleet"],annual_revenue:["revenue","sales"]};
+const CHANGE_RE=/\b(add|adding|added|more|fewer|less|new|sold|selling|sell|closing|close|closed|increase|increased|decrease|decreased|reduce|reduced|hire|hiring|hired|additional|another|couple|few|several|now|correction|should be)\b/i;
+const STATUS_ORDER={Missing:0,Conflict:1,"Material change":2,"Minor change":3,Confirmed:4};
+const MUST=new Set(["Missing","Conflict","Material change"]);
+const needsYou=r=>(MUST.has(r.status)||r.paused)&&!r.resolved;
+const AUTO_PAUSE_PROBLEMS=3;
+const SRC_LABEL={internal:"Internal account data",exposure:"Exposure file",prior_policy:"Prior-year policy",loss_runs:"Loss runs"};
+
+/* ============================================================
+   2. Helpers
+   ============================================================ */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const normQ=s=>String(s||"").replace(/[‘’‚′]/g,"'").replace(/[“”„″]/g,'"').replace(/[–—−]/g,"-").replace(/ /g," ").replace(/\s+/g," ").trim().toLowerCase();
+const normName=s=>String(s||"").toLowerCase().replace(/&/g," and ").replace(/[.,]/g," ").replace(/\s+/g," ").trim();
+const fmtMoney=v=>v==null||isNaN(v)?"—":"$"+Math.round(v).toLocaleString("en-US");
+function fmtVal(field,v){if(v==null||v==="")return"—";if(MONEY_FIELDS.has(field)||field==="loss")return fmtMoney(v);if(typeof v==="number")return v.toLocaleString("en-US");return String(v)}
+function toNum(v){if(typeof v==="number"&&isFinite(v))return v;if(typeof v==="string"){const t=v.replace(/[$,\s]/g,"");if(/^-?\d+(\.\d+)?$/.test(t))return Number(t)}return null}
+function parseUS(d){const m=String(d||"").match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);return m?new Date(Date.UTC(+m[3],+m[1]-1,+m[2])):null}
+function parseISO(d){const m=String(d||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?new Date(Date.UTC(+m[1],+m[2]-1,+m[3])):null}
+const fmtDate=d=>d?`${String(d.getUTCMonth()+1).padStart(2,"0")}/${String(d.getUTCDate()).padStart(2,"0")}/${d.getUTCFullYear()}`:"—";
+const days=(a,b)=>Math.round((a-b)/86400000);
+const pct=(a,b)=>b?((a-b)/b):null;
+const fmtPct=p=>p==null?"":(p>0?"+":"")+(Math.round(p*1000)/10)+"%";
+const sentences=t=>String(t||"").replace(/\n+/g," ").split(/(?<=[.!?])\s+/).filter(Boolean);
+
+/* ============================================================
+   3. Sources: structured ones parsed by code; emails' headers parsed by code
+   ============================================================ */
+function emailMeta(doc){const t=doc.text;const fm=t.match(/^From:\s*(.+)$/m),dm=t.match(/^Date:\s*(.+)$/m);let name="",addr="";if(fm){const m=fm[1].match(/^(.*?)\s*<([^>]+)>/);if(m){name=m[1].trim();addr=m[2].trim().toLowerCase()}else{addr=fm[1].trim().toLowerCase();name=addr}}return{name,addr,date:dm?parseUS(dm[1]):null}}
+function contactFor(D,addr){return(D.internal.contacts||[]).find(c=>String(c.email).toLowerCase()===addr)||null}
+function knownLocations(D){const s=new Set(D.internal.locations);D.exposure.rows.forEach(r=>s.add(r.loc));return[...s]}
+function matchLoc(D,s){if(s==null||s==="")return null;const t=String(s).toLowerCase();return knownLocations(D).find(l=>t===l.toLowerCase())||knownLocations(D).find(l=>t.includes(l.toLowerCase()))||("?"+s)}
+function namesLocation(D,text){const t=String(text||"").toLowerCase();return knownLocations(D).filter(l=>t.includes(l.toLowerCase()))}
+function verifyQuote(D,docId,quote){const d=D.docs[docId];if(!d||!quote)return false;return normQ(d.text).includes(normQ(quote))}
+function isEmail(id){return/^email_\d+$/.test(id)}
+function docLabel(D,id){if(SRC_LABEL[id])return SRC_LABEL[id];if(isEmail(id)){const m=emailMeta(D.docs[id]);return`Email ${fmtDate(m.date)} · ${m.name}`}return D.docs[id]?D.docs[id].title:id}
+
+/* ============================================================
+   4. Validate AI output (never trust shape; flag, never silently convert)
+   ============================================================ */
+function validateExtraction(D,ex){
+  const problems=[],obs=[],loss=[];
+  if(!ex||typeof ex!=="object"){problems.push("AI output is not a JSON object.");return{obs,loss,problems,empty:true}}
+  const seen=new Set();
+  (Array.isArray(ex.observations)?ex.observations:[]).forEach((o,i)=>{
+    if(!o||typeof o!=="object"){problems.push(`Observation ${i+1} is not an object.`);return}
+    const doc=String(o.doc||"");const field=String(o.field||"");
+    if(!D.docs[doc]){problems.push(`Observation ${i+1}: unknown document "${doc}".`);return}
+    if(!FIELD_LABEL[field]){problems.push(`Observation ${i+1}: unknown field "${field}".`);return}
+    let value=o.value;let bad=false;
+    if(NUM_FIELDS.has(field)&&value!=null){const n=toNum(value);if(n==null){bad=true;problems.push(`Observation ${i+1}: value "${value}" for ${field} is not a number.`)}value=n}
+    if(TEXT_FIELDS.has(field)&&value!=null)value=String(value);
+    const period=["annual","monthly","unstated","point_in_time"].includes(o.period)?o.period:"unstated";
+    const explicit=o.explicit===true||o.explicit==="true";
+    const loc=o.location==null||o.location===""||o.location==="null"?null:matchLoc(D,o.location);
+    const verified=verifyQuote(D,doc,o.quote);
+    if(!verified)problems.push(`Observation ${i+1} (${doc}, ${field}): quote not found word for word in the document.`);
+    const k=[doc,field,loc,value,normQ(o.quote)].join("|");if(seen.has(k))return;seen.add(k);
+    obs.push({i,doc,field,loc,value,period,explicit:explicit&&!bad&&value!=null,bad,verified,quote:String(o.quote||""),confidence:o.confidence});
+  });
+  if(ex.observations!=null&&!Array.isArray(ex.observations))problems.push("observations is not a list.");
+  (Array.isArray(ex.loss_lines)?ex.loss_lines:[]).forEach((l,i)=>{
+    if(!l||typeof l!=="object")return;const line=String(l.line||"").toUpperCase();
+    if(!LINE_NAME[line]){problems.push(`Loss line ${i+1}: unknown line "${l.line}".`);return}
+    const doc=D.docs[l.doc]?l.doc:"loss_runs";
+    const verified=verifyQuote(D,doc,l.quote);if(!verified)problems.push(`Loss line ${line}: quote not found in the loss runs.`);
+    const claims=(Array.isArray(l.claims)?l.claims:[]).map((c,j)=>{const inc=toNum(c&&c.incurred);const v=verifyQuote(D,doc,c&&c.quote);if(!v)problems.push(`Loss line ${line}, claim ${j+1}: quote not found.`);if(inc==null)problems.push(`Loss line ${line}, claim ${j+1}: incurred is not a number.`);
+      return{id:String(c&&c.id||""),date:parseISO(c&&c.date_of_loss)||parseUS(c&&c.date_of_loss),status:String(c&&c.status||"").toLowerCase(),incurred:inc,quote:String(c&&c.quote||""),verified:v&&inc!=null}});
+    loss.push({line,doc,valued:parseISO(l.valued)||parseUS(l.valued),quote:String(l.quote||""),verified,claims});
+  });
+  return{obs,loss,problems,empty:obs.length===0&&loss.length===0};
+}
+
+/* ============================================================
+   5. Rule engine (pure): extraction + advisor decisions -> field states
+   ============================================================ */
+function buildCatalog(D){
+  const F=[];const exLocs=D.exposure.rows.map(r=>r.loc);const inLocs=D.internal.locations;
+  F.push({id:"named_insured",section:"Account",field:"named_insured",loc:null,label:"Named insured",kind:"meta"});
+  F.push({id:"policy_number",section:"Account",field:"policy_number",loc:null,label:"Policy number",kind:"meta"});
+  F.push({id:"annual_revenue",section:"Account",field:"annual_revenue",loc:null,label:"Annual revenue",kind:"exposure"});
+  F.push({id:"total_payroll",section:"Account",field:"payroll",loc:null,label:"Total payroll",kind:"exposure",total:true});
+  F.push({id:"total_employees",section:"Account",field:"employees",loc:null,label:"Total employees",kind:"exposure",total:true});
+  F.push({id:"power_units",section:"Account",field:"power_units",loc:null,label:"Power units (fleet)",kind:"exposure"});
+  const all=[...new Set([...inLocs,...exLocs])];
+  all.forEach(L=>{
+    const inI=inLocs.includes(L),inE=exLocs.includes(L);
+    if(inI&&inE){F.push({id:`loc:${L}:payroll`,section:"Locations",field:"payroll",loc:L,label:`${L} · payroll`,kind:"exposure"});F.push({id:`loc:${L}:employees`,section:"Locations",field:"employees",loc:L,label:`${L} · employees`,kind:"exposure"})}
+    else F.push({id:`loc:${L}:schedule`,section:"Locations",field:"schedule",loc:L,label:inE?`${L} · new location`:`${L} · not in exposure file`,kind:"schedule",isNew:inE});
+  });
+  D.internal.lines.forEach(l=>F.push({id:`loss:${l}`,section:"Loss history",field:"loss",line:l,loc:null,label:`${LINE_NAME[l]} losses`,kind:"loss"}));
+  return F;
+}
+function ratingLines(D,field){return Object.entries(D.internal.rating_bases||{}).filter(([l,b])=>b===field&&D.internal.lines.includes(l)).map(([l])=>l)}
+function exposureCell(D,f){if(f.loc){const r=D.exposure.rows.find(x=>x.loc===f.loc);return r&&r[f.field]!=null?{value:r[f.field],cell:{row:f.loc,col:f.field}}:null}
+  const key=f.total?(f.field==="payroll"?"total_payroll":"total_employees"):f.field;const v=D.exposure.header[key];return v!=null?{value:v,cell:{row:"header",col:key}}:null}
+
+function backstopHits(D,f,fileDate){
+  /* Keyword scan of every email newer than the file: a sentence naming this field (and its location, for location fields)
+     plus a number or a change word, with no verified AI observation from that email for this field = a possible miss. */
+  if(!KEYWORDS[f.field])return[];
+  const hits=[];
+  Object.keys(D.docs).filter(isEmail).forEach(id=>{const m=emailMeta(D.docs[id]);if(!m.date||!fileDate||m.date<=fileDate)return;
+    const body=D.docs[id].text.split(/\n\n/).slice(1).join(" ");
+    sentences(body).forEach(s=>{const low=s.toLowerCase();if(!KEYWORDS[f.field].some(k=>new RegExp(`\\b${k}\\b`).test(low)))return;
+      const locs=namesLocation(D,s);if(f.loc?!locs.includes(f.loc):locs.length>0)return;
+      if(!(/\d/.test(s)||CHANGE_RE.test(s)))return;hits.push({doc:id,sentence:s,date:m.date})})});
+  return hits;
+}
+
+function runEngine(D,X,decisions,opts){
+  decisions=decisions||{};opts=opts||{};
+  const fileDate=parseISO(D.exposure.date);const renewal=parseISO(D.internal.renewal_effective);const pstart=parseISO(D.internal.period_start);
+  const cat=buildCatalog(D);const out={};const newLocs=cat.filter(f=>f.kind==="schedule"&&f.isNew).map(f=>f.loc);
+  const obsFor=(f,docPred)=>X.obs.filter(o=>o.field===f.field&&docPred(o.doc)&&((f.loc&&o.loc===f.loc)||(!f.loc&&o.loc==null)));
+  const misScoped=(f)=>X.obs.filter(o=>isEmail(o.doc)&&o.field===f.field&&o.verified&&(f.loc?(o.loc===f.loc&&!namesLocation(D,o.quote).includes(f.loc)):(o.loc==null&&namesLocation(D,o.quote).length>0)));
+  function priorOf(f){const ps=obsFor(f,d=>d==="prior_policy");const ok=ps.filter(o=>o.verified&&o.value!=null&&(!f.loc||namesLocation(D,o.quote).includes(f.loc)));
+    const bad=ps.filter(o=>!o.verified);const vals=[...new Set(ok.map(o=>String(o.value)))];
+    if(vals.length===1)return{value:ok[0].value,quote:ok[0].quote,doc:"prior_policy"};
+    return{value:null,disagree:vals.length>1,unverified:bad.length>0,cands:ok}}
+  function base(f){return{id:f.id,f,label:f.label,section:f.section,prior:null,cands:[],checks:[],notes:[],status:null,auto:false,final:null,why:"",materiality:null,needs:null,suggest:"",followup:null,highlights:[]}}
+  function classify(r,f,v,pv){
+    if(pv==null){r.status="Conflict";r.why="No prior-year value could be verified, so the change can't be measured.";r.followup=`Confirm last year's ${f.label.toLowerCase()} on the expiring policy.`;return}
+    if(v===pv){r.status="Confirmed";r.materiality={flag:false,reason:"No change from last year."};return}
+    const p=pct(v,pv);const lines=ratingLines(D,f.field);
+    if(lines.length&&Math.abs(p)>=RULES.materialPct){r.status="Material change";r.materiality={flag:true,rule:"materialPct",reason:`${fmtPct(p)} on a rating basis for ${lines.join(", ")}: at or above the ${RULES.materialPct*100}% threshold.`};return}
+    if(lines.length&&f.total&&v>pv&&newLocs.length){const add=newLocs.reduce((s,L)=>{const row=D.exposure.rows.find(x=>x.loc===L);return s+(row&&toNum(row[f.field])||0)},0);const share=add/(v-pv);
+      if(share>=RULES.concentrationShare){r.status="Material change";r.materiality={flag:true,rule:"concentration",reason:`${fmtPct(p)} is below the ${RULES.materialPct*100}% threshold, but ${Math.round(share*100)}% of the increase comes from the new location${newLocs.length>1?"s":""} (${newLocs.join(", ")}).`};return}}
+    r.status="Minor change";r.materiality={flag:false,rule:lines.length?"materialPct":"nonRating",reason:lines.length?`${fmtPct(p)} on a rating basis for ${lines.join(", ")}: below the ${RULES.materialPct*100}% threshold.`:`${fmtPct(p)}. ${FIELD_LABEL[f.field]} is not a rating basis for any line marketed (${D.internal.lines.join(", ")}).`};
+  }
+  // ---- policy metadata: internal account data is the authority
+  function meta(f){const r=base(f);const iv=D.internal[f.field];const ec=exposureCell(D,f);const pr=priorOf(f);r.prior=pr.value!=null?pr:null;
+    if(iv)r.cands.push({src:"internal",value:iv,label:SRC_LABEL.internal,cell:{row:"internal",col:f.field},verified:true});
+    if(ec)r.cands.push({src:"exposure",value:ec.value,label:SRC_LABEL.exposure,cell:ec.cell,verified:true});
+    const em=obsFor(f,isEmail).filter(o=>o.verified);em.forEach(o=>r.cands.push({src:o.doc,value:o.value,label:docLabel(D,o.doc),quote:o.quote,verified:true}));
+    r.checks.push({name:"Authority",ok:!!iv,detail:"Internal account data is the source of truth for policy metadata."});
+    if(!iv){r.status="Missing";r.why="Internal account data has no value for this policy field.";return r}
+    if(em.length){r.status="Conflict";r.why="A client email states a different policy detail. Policy metadata changes are never applied from email automatically.";r.followup=`Confirm the ${f.label.toLowerCase()}: our records show ${iv}.`;return r}
+    if(pr.disagree||pr.unverified){r.status="Conflict";r.why="Prior-policy evidence for this field couldn't be verified or disagrees.";return r}
+    if(pr.value!=null&&normName(pr.value)!==normName(iv)){r.status="Conflict";r.why=`Internal data (${iv}) and the expiring policy (${pr.value}) disagree.`;return r}
+    r.status="Confirmed";r.auto=true;r.final={value:iv,src:"internal"};r.materiality={flag:false,reason:"Policy metadata unchanged."};
+    r.why="Internal account data is the authority for policy metadata and matches the expiring policy.";
+    if(ec&&normName(ec.value)!==normName(iv)){r.notes.push(`The exposure file shows "${ec.value}". Internal data wins for this field; ask the client to correct their file.`)}
+    return r}
+  // ---- exposures: latest exposure file is the authority, unless an email passes all five conditions
+  function expo(f){const r=base(f);const ec=exposureCell(D,f);const pr=priorOf(f);r.prior=pr.value!=null?pr:null;
+    if(pr.disagree)r.notes.push("Prior-policy values disagree; no baseline used.");
+    if(ec)r.cands.push({src:"exposure",value:ec.value,label:`${SRC_LABEL.exposure} (${fmtDate(fileDate)})`,cell:ec.cell,verified:true});
+    const emAll=obsFor(f,isEmail);const unver=emAll.filter(o=>!o.verified||o.bad);const mis=misScoped(f);
+    const em=emAll.filter(o=>o.verified&&!o.bad).map(o=>({...o,meta:emailMeta(D.docs[o.doc])}));
+    em.forEach(o=>{const conv=o.period==="monthly"&&o.value!=null?o.value*12:null;r.cands.push({src:o.doc,value:o.value,label:docLabel(D,o.doc),quote:o.quote,verified:true,period:o.period,explicit:o.explicit,converted:conv,date:o.meta.date})});
+    const hits=backstopHits(D,f,fileDate).filter(h=>!em.some(o=>o.doc===h.doc));
+    if(!ec){r.status="Missing";r.why="The exposure file has no value for this field.";r.followup=`Please provide ${f.label.toLowerCase()} in the exposure file.`;return r}
+    if(unver.length){r.status="Conflict";r.why="Claude returned evidence for this field that couldn't be verified word for word, so nothing is settled automatically.";return r}
+    if(mis.length){r.status="Conflict";r.why=`An email statement was tagged to the wrong scope (its quote names ${namesLocation(D,mis[0].quote).join(", ")||"no location"}). Scope must be clear before an email can change a value.`;return r}
+    if(hits.length){r.status="Conflict";r.why=`A newer email mentions this field but no value was extracted ("${hits[0].sentence}"). Backstop: a person checks it.`;r.cands.push({src:hits[0].doc,value:null,label:docLabel(D,hits[0].doc),quote:hits[0].sentence,verified:true,backstop:true});r.followup=`Please confirm ${f.label.toLowerCase()}: your ${fmtDate(hits[0].date)} email mentions it.`;return r}
+    const sentOf=o=>{const t=D.docs[o.doc].text;return sentences(t).find(x=>normQ(x).includes(normQ(o.quote)))||o.quote};
+    const inert=o=>(!o.explicit||o.value==null)&&!CHANGE_RE.test(o.quote)&&!CHANGE_RE.test(sentOf(o));
+    em.filter(inert).forEach(o=>r.notes.push(`${docLabel(D,o.doc)} mentions this field without a value or any change ("${o.quote}"), so it doesn't block.`));
+    const newer=em.filter(o=>!inert(o)&&o.meta.date&&fileDate&&o.meta.date>fileDate).sort((a,b)=>a.meta.date-b.meta.date);
+    em.filter(o=>!newer.includes(o)).forEach(o=>r.notes.push(`${docLabel(D,o.doc)} is not newer than the exposure file, so it can't supersede it.`));
+    let finalV=ec.value,finalSrc="exposure";
+    if(newer.length){
+      const latest=newer[newer.length-1];
+      const allHits=backstopHits(D,f,fileDate);
+      const evalOne=o=>{const c=contactFor(D,o.meta.addr);const auth=!!c&&(c.authorized_for.includes("all")||c.authorized_for.includes(f.field));
+        const needPeriod=MONEY_FIELDS.has(f.field)?["annual"]:["point_in_time","unstated"];const saysMonthly=/\b(a|per)\s+month\b|\bmonthly\b|\/\s*mo\b/i.test(o.quote);
+        const ident=o.explicit&&o.value!=null&&needPeriod.includes(o.period)&&!(MONEY_FIELDS.has(f.field)&&saysMonthly);
+        const scope=f.loc?(o.loc===f.loc&&namesLocation(D,o.quote).includes(f.loc)):(o.loc==null&&namesLocation(D,o.quote).length===0);
+        const later=[...newer.filter(x=>x!==o&&x.meta.date>=o.meta.date),...allHits.filter(h=>h.doc!==o.doc&&h.date>=o.meta.date)];
+        const rec=o.meta.date>fileDate&&later.length===0;
+        const others=newer.filter(x=>x!==o&&x.explicit&&x.value!=null&&x.value!==o.value);
+        return[
+          {name:"Authority",ok:auth,detail:c?`${c.name}, ${c.role}${auth?" (authorized for this field)":" (not authorized for this field)"}`:`${o.meta.name||o.meta.addr} is not an authorized client contact`},
+          {name:"Field identity",ok:ident,detail:!o.explicit||o.value==null?"Statement is not a definite value":MONEY_FIELDS.has(f.field)&&saysMonthly&&o.period!=="monthly"?`The quote says monthly but was tagged "${o.period}". Backstop: period must be unambiguous`:o.period==="monthly"?`Stated monthly; the field is annual (×12 = ${fmtMoney(o.value*12)}). Conversion changes meaning`:ident?`Same field, same unit and period`:`Period "${o.period}" doesn't match`},
+          {name:"Scope",ok:scope,detail:f.loc?(scope?`Names ${f.loc} only`:`Doesn't clearly apply to ${f.loc}`):(scope?"Whole account":"Names a specific location")},
+          {name:"Recency",ok:rec,detail:rec?`${fmtDate(o.meta.date)}, after the file (${fmtDate(fileDate)}); nothing later touches this field`:`A later email (${fmtDate((later[0]&&(later[0].meta?later[0].meta.date:later[0].date))||null)}) also touches this field`},
+          {name:"No contradiction",ok:others.length===0,detail:others.length?`Another email says ${fmtVal(f.field,others[0].value)}`:"No other current evidence disagrees"}]};
+      newer.forEach(o=>r.checks.push({email:o.doc,label:docLabel(D,o.doc),list:evalOne(o)}));
+      const lastChecks=evalOne(latest);const allOk=lastChecks.every(c=>c.ok);
+      if(!allOk||newer.length>1&&newer.some(o=>!evalOne(o).every(c=>c.ok))){
+        r.status="Conflict";const failed=[...new Set(r.checks.flatMap(c=>c.list.filter(x=>!x.ok).map(x=>x.name.toLowerCase())))];
+        r.why=`A newer client email bears on this field, but ${failed.join(", ")} ${failed.length>1?"aren't":"isn't"} clear, so it can't supersede the file automatically.`;
+        r.followup=followupFor(D,f,r);return r}
+      if(latest.value===ec.value){r.notes.push(`${docLabel(D,latest.doc)} confirms the exposure file.`)}else{finalV=latest.value;finalSrc=latest.doc}
+    }
+    r.proposed={value:finalV,src:finalSrc};
+    return r}
+  // ---- schedule rows
+  function sched(f){const r=base(f);const row=D.exposure.rows.find(x=>x.loc===f.loc);
+    if(f.isNew){r.status="Material change";r.materiality={flag:true,rule:"newLocation",reason:"New location: not on the expiring policy or in internal account data."};
+      r.cands.push({src:"exposure",value:`${row.address} · ${row.operations} · ${row.employees} employees · ${fmtMoney(row.payroll)} payroll`,label:SRC_LABEL.exposure,cell:{row:f.loc,col:"*"},verified:true});
+      r.why=`${f.loc} appears in the exposure file but not on last year's schedule. New operations (${row.operations.toLowerCase()}) can change carrier appetite and pricing.`;
+      r.suggest=`Tell carriers: new ${row.operations.toLowerCase()} location at ${row.address}, ${row.employees} employees, ${fmtMoney(row.payroll)} payroll. Confirm appetite and class codes before marketing.`;
+      r.proposed={value:`Add ${f.loc} to schedule`,src:"exposure"}}
+    else{r.status="Conflict";r.why=`${f.loc} is on last year's schedule but missing from the exposure file. Closed, or left out?`;r.followup=`Is the ${f.loc} location still operating? It's not in the exposure file.`}
+    return r}
+  // ---- loss history
+  function lossRow(f){const r=base(f);const L=f.line;const entries=X.loss.filter(e=>e.line===L).sort((a,b)=>(b.valued||0)-(a.valued||0));const lossDocs=Object.keys(D.docs).filter(id=>id.startsWith("loss_runs"));
+    const present=lossDocs.some(id=>LINE_HEADER[L].test(D.docs[id].text));const text=entries.length?(D.docs[entries[0].doc]||{}).text||"":"";
+    entries.slice(1).forEach(x=>r.notes.push(`Older ${LINE_NAME[L]} loss runs (valued ${fmtDate(x.valued)}) superseded by newer ones.`));
+    if(!entries.length){if(present){r.status="Conflict";r.why=`The loss runs contain a ${LINE_NAME[L]} section, but nothing was extracted. Backstop: a person checks it.`}
+      else{r.rules=["ratingBases","missingHard"];r.status="Missing";r.why=`${LINE_NAME[L]} is being marketed, but no ${LINE_NAME[L]} loss runs were provided. Carriers need currently valued loss runs for every line.`;r.followup=`Please send currently valued ${LINE_NAME[L]} loss runs (valued within ${RULES.lossFreshDays} days of ${fmtDate(renewal)}), five years if available.`}
+      return r}
+    const e=entries[0];r.cands.push({src:e.doc,value:null,label:`${e.doc==="loss_runs"?SRC_LABEL.loss_runs:D.docs[e.doc].title} · valued ${fmtDate(e.valued)}`,quote:e.quote,verified:e.verified});
+    if(!e.verified||e.claims.some(c=>!c.verified)){r.status="Conflict";r.why="Loss-run evidence couldn't be verified word for word.";return r}
+    if(!e.valued){r.status="Conflict";r.why="No valuation date was found for this line.";return r}
+    const age=days(renewal,e.valued);
+    if(age>RULES.lossFreshDays){r.rules=["lossFresh","missingHard"];r.status="Missing";r.why=`${LINE_NAME[L]} loss runs are valued ${fmtDate(e.valued)}, ${age} days before the ${fmtDate(renewal)} renewal (limit ${RULES.lossFreshDays}). Stale loss runs can't go to carriers.`;r.followup=`Please send ${LINE_NAME[L]} loss runs valued within ${RULES.lossFreshDays} days of ${fmtDate(renewal)}; the ones we have are valued ${fmtDate(e.valued)}.`;return r}
+    // backstop: count claim lines in this line's section of the document
+    const sec=sectionText(text,L);const listed=(sec.match(/date of loss/gi)||[]).length;
+    if(listed!==e.claims.length){r.status="Conflict";r.why=`The ${LINE_NAME[L]} section lists ${listed} claim${listed===1?"":"s"}; ${e.claims.length} were extracted. Backstop: a person checks it.`;return r}
+    const term=e.claims.filter(c=>c.date&&c.date>=pstart);const inc=term.reduce((s,c)=>s+c.incurred,0);
+    term.forEach(c=>r.cands.push({src:e.doc,value:c.incurred,label:`Claim ${c.id||""} · ${c.status} · loss ${fmtDate(c.date)}`,quote:c.quote,verified:true,isClaim:true}));
+    r.prior={value:null,label:"Prior term"};
+    const big=term.filter(c=>c.status==="open"||c.incurred>=RULES.largeClaim);
+    r.lossValue=inc;
+    if(!term.length){r.status="Confirmed";r.materiality={flag:false,reason:"No new claims this term."}}
+    else if(big.length){r.status="Material change";r.materiality={flag:true,rule:"largeClaim",reason:`New claim this term: ${big.map(c=>`${c.id} ${c.status}, ${fmtMoney(c.incurred)} incurred`).join("; ")}. Open claims or claims ≥ ${fmtMoney(RULES.largeClaim)} are material.`};
+      r.suggest=`Tell carriers: ${big.map(c=>`${c.id} (${c.status}, ${fmtMoney(c.incurred)})`).join("; ")}. Include the incident summary and any corrective action.`}
+    else{r.status="Minor change";r.materiality={flag:false,rule:"largeClaim",reason:`${term.length} new closed claim${term.length>1?"s":""} under ${fmtMoney(RULES.largeClaim)}.`}}
+    r.proposed={value:inc,src:e.doc};r.why=`Valued ${fmtDate(e.valued)} (${age} days before renewal). ${term.length} claim${term.length===1?"":"s"} this term, ${fmtMoney(inc)} incurred.`;
+    return r}
+  // Pass 1: everything except totals
+  cat.forEach(f=>{let r;if(f.kind==="meta")r=meta(f);else if(f.kind==="schedule")r=sched(f);else if(f.kind==="loss")r=lossRow(f);else if(f.total)return;else r=expo(f);out[f.id]=r});
+  // classify non-total exposure rows
+  cat.filter(f=>f.kind==="exposure"&&!f.total).forEach(f=>{const r=out[f.id];if(r.status)return;const pv=r.prior?r.prior.value:null;classify(r,f,r.proposed.value,pv);
+    if(!r.why)r.why=r.proposed.src==="exposure"?`The exposure file is the authority for current exposures and no newer evidence changes it. ${r.materiality?r.materiality.reason:""}`:`The ${fmtDate(emailMeta(D.docs[r.proposed.src]).date)} email passes all five conditions, so it supersedes the exposure file. ${r.materiality?r.materiality.reason:""}`});
+  // Pass 2: totals = must reconcile with their locations
+  cat.filter(f=>f.total).forEach(f=>{const r=expo(f);out[f.id]=r;if(r.status)return;
+    const kids=cat.filter(k=>k.field===f.field&&k.loc&&k.kind==="exposure").map(k=>out[k.id]);
+    const newRows=newLocs.map(L=>D.exposure.rows.find(x=>x.loc===L));
+    const pv=r.prior?r.prior.value:null;classify(r,f,r.proposed.value,pv);const matSave=r.materiality;const statusSave=r.status;
+    const open=kids.filter(k=>MUST.has(k.status)&&!decisions[k.id]&&k.status!=="Material change");
+    if(open.length){r.status="Conflict";r.materiality=matSave;r.why=`Depends on ${open.map(k=>k.label).join(", ")}, which ${open.length>1?"are":"is"} unresolved. A total can't be final while a location is open.${matSave&&matSave.flag?" Also flagged material: "+matSave.reason:""}`;r.dependsOn=open.map(k=>k.id);r.followup=null;return}
+    const kidVal=k=>decisions[k.id]&&decisions[k.id].value!=null?decisions[k.id].value:(k.final?k.final.value:k.proposed?k.proposed.value:null);
+    const sum=kids.reduce((s,k)=>s+(toNum(kidVal(k))||0),0)+newRows.reduce((s,x)=>s+(toNum(x[f.field])||0),0);
+    if(sum!==r.proposed.value){r.status="Conflict";r.materiality=matSave;r.cands.push({src:"rules",value:sum,label:"Sum of locations (rules)",verified:true,computed:true});
+      r.why=`The locations add up to ${fmtVal(f.field,sum)}, but the total says ${fmtVal(f.field,r.proposed.value)}. A location-level change must not be applied to the account total silently.${matSave&&matSave.flag?" Also flagged material: "+matSave.reason:""}`;r.followup=`Please confirm total ${FIELD_LABEL[f.field].toLowerCase()}: the locations add up to ${fmtVal(f.field,sum)}; the file total shows ${fmtVal(f.field,r.proposed.value)}.`;return}
+    r.status=statusSave;r.why=`Total matches its locations (${fmtVal(f.field,sum)}). ${r.materiality?r.materiality.reason:""}`});
+  // finalize: auto, needs, suggestions, decisions
+  Object.values(out).forEach(r=>{
+    if(r.status==="Confirmed"||r.status==="Minor change"){r.auto=true;if(!r.final)r.final=r.proposed?{...r.proposed}:null;if(r.f.kind==="loss")r.final={value:r.lossValue,src:r.proposed?r.proposed.src:"loss_runs"}}
+    else{r.auto=false;r.needs=r.status==="Missing"?"obtain":r.status==="Conflict"?"resolve":"acknowledge"}
+    if(r.status==="Material change"&&!r.suggest&&r.materiality)r.suggest=`Tell carriers: ${r.label.toLowerCase()} changed (${r.materiality.reason})`;
+    if(r.status==="Conflict"&&!r.followup)r.followup=followupFor(D,r.f,r);
+    r.ruleStatus=r.status;r.ruleAuto=r.auto;r.ruleFinal=r.final?{...r.final}:null;
+    if(opts.paused&&r.auto){r.auto=false;r.paused=true;r.needs="confirm"}
+    const d=decisions[r.id];
+    if(d&&r.status!=="Missing"){r.decision=d;r.final={value:d.value,src:d.src,by:"advisor"};r.resolved=true}
+  });
+  return{fields:out,cat};
+}
+function sectionText(text,L){const lines=text.split("\n");let on=false;const keep=[];for(const ln of lines){if(/^[A-Z][A-Z '&]+(\(|$)/.test(ln.trim())&&ln.trim().length>3){on=LINE_HEADER[L].test(ln)}else if(on)keep.push(ln)}return keep.join("\n")}
+function followupFor(D,f,r){const vals=r.cands.filter(c=>c.value!=null&&!c.computed).map(c=>`${c.label}: ${fmtVal(f.field,c.value)}${c.period==="monthly"?" a month":""}`);
+  return`Please confirm ${f.loc?f.loc+" ":""}${FIELD_LABEL[f.field]?FIELD_LABEL[f.field].toLowerCase():f.label.toLowerCase()} as of ${fmtDate(parseISO(D.internal.renewal_effective))}.${vals.length?" We have "+vals.join("; ")+".":""}`}
+
+/* ============================================================
+   6. Live extraction (Claude reads only the unstructured sources)
+   ============================================================ */
+function buildPrompt(D){
+  const ids=Object.keys(D.docs);
+  const docs=ids.map(id=>`<document id="${id}" title="${esc(D.docs[id].title)}">\n${D.docs[id].text}\n</document>`).join("\n");
+  return`You are extracting evidence for a commercial insurance renewal. Read the documents and report every statement of the listed fields, exactly as written.
+Do not reconcile sources, pick winners, convert units or compute totals. Separate rules do that and an advisor makes the final call. Your job is complete, faithful evidence: a missed statement or a paraphrased quote can put wrong data in front of a carrier.
+
+<documents>
+${docs}
+</documents>
+
+FIELDS (use these keys)
+- named_insured, policy_number: text.
+- annual_revenue: dollars.
+- payroll: dollars. Report the period exactly as stated: "annual", "monthly" or "unstated".
+- employees: a count (headcount, staff, employees). Period "point_in_time".
+- power_units: a count of trucks, tractors or power units. Period "point_in_time".
+
+LOCATIONS: when a statement refers to a location, use one of these names: ${knownLocations(D).join(", ")}. Use null only for whole-account totals.
+
+RULES
+1. One observation per statement per document. A schedule line listing employees and payroll gives two observations with the same quote.
+2. quote: an exact substring of the document. No paraphrase, no ellipsis. For a location's value, the quote must include the location's name.
+3. value: the number as stated, with no conversion (a monthly figure stays monthly).
+4. explicit: true only when the statement gives a definite current value. If it is vague or only signals a possible or future change, set value null and explicit false, but still report it.
+5. Report statements in emails even when they repeat or contradict other documents.
+6. Loss runs: for each line present (GL, WC, AUTO), give its valuation date and every claim listed, with date of loss, status (open or closed), incurred amount, and the claim's full line as the quote. Do not report lines that are absent.
+7. confidence: high, medium or low (informational).
+
+Examples of the format (not from these documents):
+- "Headcount at Springfield is now 25" → {"field":"employees","location":"Springfield","value":25,"period":"point_in_time","explicit":true}
+- "Payroll runs about $40,000 a month" → {"field":"payroll","location":null,"value":40000,"period":"monthly","explicit":true}
+- "We might hire a few more drivers next year" → {"field":"employees","location":null,"value":null,"period":"point_in_time","explicit":false}
+
+Return ONLY JSON:
+{"observations":[{"doc":"","field":"","location":null,"value":null,"period":"annual","explicit":true,"confidence":"high","quote":""}],
+"loss_lines":[{"doc":"loss_runs","line":"GL","valued":"YYYY-MM-DD","quote":"","claims":[{"id":"","date_of_loss":"YYYY-MM-DD","status":"closed","incurred":0,"quote":""}]}],
+"notes":[""]}`;
+}
+async function callClaude(D,signal){
+  const sample=state.sample;if(!sample)throw Object.assign(new Error("Claude isn't available in this view (open the page on claude.ai)."),{code:"unavailable"});
+  const t0=performance.now();
+  const res=await sample(buildPrompt(D),{modelTier:"complex",cache:false,signal,onText:({text})=>setStatus(`Claude is reading ${Object.keys(D.docs).length} documents… ${text.length.toLocaleString()} characters`)});
+  const ms=Math.round(performance.now()-t0);
+  if(res.truncated)throw Object.assign(new Error("Claude's answer was cut off."),{code:"truncated",text:res.text});
+  const s=res.text.indexOf("{"),e=res.text.lastIndexOf("}");
+  if(s<0)throw Object.assign(new Error("No JSON in Claude's answer."),{code:"no_json",text:res.text});
+  let json;try{json=JSON.parse(res.text.slice(s,e+1))}catch(err){throw Object.assign(new Error("Claude's answer wasn't valid JSON."),{code:"bad_json",text:res.text})}
+  return{json,text:res.text,ms};
+}
+
+/* ============================================================
+   7. App state + scoring
+   ============================================================ */
+const state={ds:location.hash==="#blind"?"blind":"dev",mode:"saved",X:null,raw:null,E:null,decisions:{},sel:null,tab:null,filter:"all",runs:{dev:[],blind:[]},log:[],busy:false,ctl:null,sample:null,db:undefined,followups:{},forced:null};
+const D=()=>DATA[state.ds];
+function setStatus(t,err){const el=$("status");el.textContent=t;el.className="status"+(err?" err":"")}
+function logLine(t){state.log.push(`${new Date().toLocaleTimeString()} · ${t}`);renderLog()}
+function score(ds,E){const K=KEYS[ds];if(!K)return null;const rows=[];const S={n:0,wrongAuto:0,must:0,mustRouted:0,statusOk:0,autoKey:0,provOk:0,matFlag:null};
+  Object.entries(K.fields).forEach(([id,k])=>{S.n++;const r=E.fields[id];if(!r){rows.push({id,k,miss:true,label:"Field not produced"});if(k.must_review)S.must++;S.wrongAuto+=k.must_review?0:0;return}
+    const auto=r.ruleAuto,st=r.ruleStatus,fin=r.ruleFinal;let wrong=false,why="";
+    if(auto&&k.must_review){wrong=true;why="auto-resolved a must-review field"}
+    else if(auto&&k.auto_value!=null&&(String(fin&&fin.value)!==String(k.auto_value))){wrong=true;why=`auto value ${fin&&fin.value} ≠ key ${k.auto_value}`}
+    else if(auto&&k.auto_source&&fin&&fin.src!==k.auto_source){wrong=true;why=`source ${fin.src} ≠ key ${k.auto_source}`}
+    if(wrong)S.wrongAuto++;
+    if(k.must_review){S.must++;if(!auto)S.mustRouted++}
+    const sOk=st===k.expected_status||(k.safe_alt||[]).includes(st);if(sOk)S.statusOk++;
+    if(!k.must_review){S.autoKey++;if(auto&&!wrong)S.provOk++}
+    if(k.material_flag){S.matFlag=!!(r.materiality&&r.materiality.flag)}
+    rows.push({id,k,r,auto,st,fin,wrong,why,sOk,label:wrong?"WRONG AUTO":k.must_review&&auto?"MISSED REVIEW":sOk?(st===k.expected_status?"Pass":"Pass (pre-registered safe alternative)"):k.must_review&&!auto?"Routed to advisor (different status)":"Over-escalated"})});
+  const extras=Object.keys(E.fields).filter(id=>!K.fields[id]);
+  return{rows,S,extras}}
+function summaryOf(E){const c={};Object.values(E.fields).forEach(r=>{c[r.ruleStatus]=(c[r.ruleStatus]||0)+1});return c}
+
+/* ============================================================
+   8. Run flows
+   ============================================================ */
+function process(json,meta){
+  const X=validateExtraction(D(),json);state.X=X;state.raw=json;state.decisions={};state.followups={};state.forced=null;
+  recompute();state.runE=state.E;
+  const sc=score(state.ds,state.E);
+  const run={n:state.runs[state.ds].length+1,mode:meta.mode,at:new Date(),ms:meta.ms||null,problems:X.problems.length,statuses:Object.fromEntries(Object.values(state.E.fields).map(r=>[r.id,r.ruleStatus+"|"+(r.ruleFinal?String(r.ruleFinal.value)+"@"+r.ruleFinal.src:"")])),score:sc?sc.S:null};
+  state.runs[state.ds].push(run);state.lastRun=run;
+  if(!state.sel||!state.E.fields[state.sel]){const first=Object.values(state.E.fields).sort((a,b)=>STATUS_ORDER[a.status]-STATUS_ORDER[b.status])[0];state.sel=first?first.id:null}
+  renderAll();return run}
+function recompute(){if(!state.X)return;state.autoPaused=state.X.empty||state.X.problems.length>=AUTO_PAUSE_PROBLEMS;state.E=runEngine(D(),state.X,state.decisions,{paused:state.paused||state.autoPaused})}
+function runSaved(){Object.keys(D().held_docs||{}).forEach(id=>delete D().docs[id]);const s=SAVED[state.ds];if(!s){setStatus("No saved run for the blind client: the blind test only counts live Claude runs. Switch to Live Claude.");return}
+  process(s,{mode:"saved"});logLine(`Loaded saved run (${D().label})`);setStatus("Saved Claude run loaded. Click a field to see its evidence and decision.")}
+async function runLive(times){
+  if(state.busy)return;Object.keys(D().held_docs||{}).forEach(id=>delete D().docs[id]);state.busy=true;state.ctl=new AbortController();renderControls();
+  try{for(let i=1;i<=times;i++){setStatus(`Live run ${i} of ${times}: Claude is reading ${Object.keys(D().docs).length} documents…`);
+    try{const r=await callClaude(D(),state.ctl.signal);const run=process(r.json,{mode:"live",ms:r.ms});run.raw=r.text;logLine(`Live run ${i}/${times}: ${(r.ms/1000).toFixed(1)}s, ${state.X.obs.length} observations, ${state.X.problems.length} validation problems`);await persistRun(run,r.text,null)}
+    catch(e){if(e&&e.name==="AbortError"){logLine("Stopped.");break}logLine(`Live run ${i} failed: ${e&&e.message||e}`);setStatus(`Live run failed: ${e&&e.message||e}. ${SAVED[state.ds]?"You can load the saved run.":""}`,true);await persistRun({n:"failed",mode:"live",at:new Date()},e&&e.text||null,String(e&&e.message||e));if(e&&e.code==="unavailable")break}}
+    if(state.lastRun&&state.lastRun.mode==="live")setStatus(`Live run${times>1?"s":""} complete. ${state.runs[state.ds].filter(r=>r.mode==="live").length} live run(s) on this client in this session.`)}
+  finally{state.busy=false;state.ctl=null;renderControls()}}
+async function getDb(){if(state.db!==undefined)return state.db;try{state.db=window.claude?await window.claude.use("db"):null}catch(e){state.db=null}return state.db}
+async function persistRun(run,rawText,err){const db=await getDb();if(!db)return;const id=`${state.ds}-${Date.now()}`;
+  try{await db.collection("runs").doc(id).set({dataset:state.ds,at:new Date().toISOString(),mode:run.mode,ms:run.ms||null,keySha:KEY_SHA[state.ds]||null,problems:run.problems??null,statuses:run.statuses||null,score:run.score||null,raw:rawText?String(rawText).slice(0,120000):null,error:err||null});logLine(`Stored as runs/${id}`)}catch(e){logLine(`Could not store run: ${e&&e.code||e}`)}}
+function forcedHigh(){if(!state.raw)return;const j=JSON.parse(JSON.stringify(state.raw));(j.observations||[]).forEach(o=>o.confidence="high");
+  const X2=validateExtraction(D(),j);const E2=runEngine(D(),X2,{});const a=(state.runE||state.E).fields,b=E2.fields;let same=0,total=0;const diffs=[];
+  Object.keys(a).forEach(id=>{total++;const x=a[id].ruleStatus+"|"+JSON.stringify(a[id].ruleFinal),y=b[id]?b[id].ruleStatus+"|"+JSON.stringify(b[id].ruleFinal):"none";if(x===y)same++;else diffs.push(id)});
+  state.forced={same,total,diffs,at:new Date()};logLine(`Forced-high-confidence replay: ${same}/${total} fields unchanged`);renderEval()}
+
+/* ============================================================
+   9. Rendering
+   ============================================================ */
+function pillClass(st){return"s-"+String(st).split(" ")[0]}
+function renderControls(){
+  $("dsDev").classList.toggle("on",state.ds==="dev");$("dsBlind").classList.toggle("on",state.ds==="blind");
+  $("mSaved").classList.toggle("on",state.mode==="saved");$("mLive").classList.toggle("on",state.mode==="live");
+  $("mSaved").disabled=!SAVED[state.ds];$("mLive").disabled=!state.sample;
+  $("runBtn").disabled=state.busy||(state.mode==="live"&&!state.sample)||(state.mode==="saved"&&!SAVED[state.ds]);
+  $("run3Btn").disabled=state.busy||!state.sample;$("stopBtn").hidden=!state.busy;
+  $("runBtn").textContent=state.mode==="live"?"Run reconciliation (live)":"Run reconciliation";
+}
+function renderClient(){const d=D();const i=d.internal;
+  const srcs=[["Internal account data",i.system],["Exposure file",`${d.exposure.file} · ${fmtDate(parseISO(d.exposure.date))}`],["Prior-year policy",`${i.policy_number}`],["Loss runs","carrier report"],["Client emails",`${Object.keys(d.docs).filter(isEmail).length}`]];
+  $("client").innerHTML=`<span><b>${esc(i.named_insured)}</b></span><span>Renewal <b>${fmtDate(parseISO(i.renewal_effective))}</b></span><span>Lines <b>${i.lines.map(l=>LINE_NAME[l]).join(", ")}</b></span><span>Account manager <b>${esc(i.account_manager)}</b></span><span>Sources: ${srcs.map(s=>`<b>${s[0]}</b> (${esc(s[1])})`).join(" · ")}</span>`}
+function blockers(){if(!state.E)return[];return Object.values(state.E.fields).filter(needsYou)}
+function renderBar(){
+  if(!state.E){$("chips").innerHTML="";$("prog").innerHTML="";$("readyBtn").disabled=true;return}
+  const F=Object.values(state.E.fields);const c=s=>F.filter(r=>r.status===s).length;
+  const defs=[["all","All fields",F.length],["needs","Needs you",F.filter(needsYou).length],["Confirmed","Confirmed",c("Confirmed")],["Minor change","Minor change",c("Minor change")],["Material change","Material change",c("Material change")],["Conflict","Conflict",c("Conflict")],["Missing","Missing",c("Missing")]];
+  $("chips").innerHTML=defs.map(([k,l,n])=>`<span class="chip ${k.split(" ")[0]==="all"||k==="needs"?"":pillClass(k)} ${state.filter===k?"on":""}" data-f="${k}">${l} <b>${n}</b></span>`).join("");
+  $("chips").querySelectorAll(".chip").forEach(el=>el.onclick=()=>{state.filter=el.dataset.f;renderAll()});
+  const need=F.filter(r=>MUST.has(r.status)||r.paused);const done=need.filter(r=>r.resolved).length;const bl=blockers();const miss=bl.filter(r=>r.status==="Missing").length;
+  $("prog").innerHTML=`<div><b>${done} of ${need.length}</b> advisor decisions made · <b>${bl.length}</b> blocker${bl.length===1?"":"s"}${miss?` (${miss} missing document${miss>1?"s":""})`:""}</div><div class="pbar"><i style="width:${need.length?Math.round(done/need.length*100):100}%"></i></div>`;
+  const rb=$("readyBtn");rb.disabled=bl.length>0;rb.className="btn"+(bl.length?"":" ready");rb.title=bl.length?`Blocked: ${bl.map(r=>r.label).join(", ")}`:"Open the submission package";
+  rb.textContent=bl.length?`Ready to market · blocked (${bl.length})`:"Ready to market ✓";
+}
+function curVal(r){if(r.final)return r.final.value;if(r.proposed&&r.status!=="Conflict")return r.proposed.value;return null}
+function renderTable(){
+  const t=$("ftab");if(!state.E){t.innerHTML=`<tr><td class="empty">Run reconciliation to build the renewal facts.</td></tr>`;$("tblNote").textContent="";return}
+  const F=Object.values(state.E.fields);let rows=F;
+  if(state.filter==="needs")rows=F.filter(needsYou);else if(state.filter!=="all")rows=F.filter(r=>r.status===state.filter);
+  $("tblNote").textContent=`${rows.length} of ${F.length}`;
+  let html=`<tr><th>Field</th><th style="text-align:right">Last year</th><th style="text-align:right">This year</th><th>Status</th></tr>`;
+  ["Account","Locations","Loss history"].forEach(sec=>{const rs=rows.filter(r=>r.section===sec);if(!rs.length)return;html+=`<tr class="sec"><td colspan="4">${sec}</td></tr>`;
+    rs.forEach(r=>{const f=r.f;const pv=r.prior?r.prior.value:null;const v=curVal(r);
+      const fld=f.kind==="loss"?"loss":f.field;
+      let ly=f.kind==="loss"?`<span class="fs">claims this term</span>`:f.kind==="schedule"?(f.isNew?"—":"On schedule"):fmtVal(fld,pv);
+      let ty=f.kind==="schedule"?(f.isNew?"Added":"?"):r.status==="Missing"?`<span class="fs">missing</span>`:v==null?(()=>{const n=r.cands.filter(c=>c.value!=null).length;return`<span class="fs">${n} value${n===1?"":"s"} · open</span>`})():fmtVal(fld,v);
+      const p=(typeof v==="number"&&typeof pv==="number"&&pv)?pct(v,pv):null;
+      const by=r.resolved?`<div class="tick">✓ ${r.decision.type==="acknowledge"?"Acknowledged":r.decision.type==="confirm"?"Confirmed":"Resolved"} by advisor</div>`:r.paused?`<div class="need">Needs you · auto-settle paused</div>`:MUST.has(r.status)?`<div class="need">Needs you</div>`:`<div class="tick" style="color:var(--muted)">Settled by rules</div>`;
+      html+=`<tr class="row ${state.sel===r.id?"sel":""}" data-id="${esc(r.id)}"><td><div class="fl">${esc(r.label)}</div><div class="fs">${esc(r.final?docLabel(D(),r.final.src==="rules"?"exposure":r.final.src).replace(/ · .*/,""):r.proposed&&r.status!=="Conflict"&&r.status!=="Missing"?docLabel(D(),r.proposed.src).replace(/ · .*/,""):"")}</div></td>
+        <td class="num${f.kind==="meta"?" txt":""}">${ly}</td><td class="num${f.kind==="meta"?" txt":""}">${ty}${p!=null&&p!==0?`<div class="delta ${Math.abs(p)>=RULES.materialPct?"up":""}">${fmtPct(p)}</div>`:""}</td>
+        <td><span class="pill ${pillClass(r.status)}">${r.status}</span>${by}</td></tr>`})});
+  t.innerHTML=html;t.querySelectorAll("tr.row").forEach(tr=>tr.onclick=()=>{state.sel=tr.dataset.id;state.tab=null;renderAll()});
+}
+function candDisplay(r,c){const fld=r.f.kind==="loss"?"loss":r.f.field;if(c.backstop)return"(no value extracted)";if(c.value==null)return c.isClaim?"":"—";let s=fmtVal(fld,c.value);if(c.period==="monthly")s+=` a month <span class="note">(= ${fmtMoney(c.value*12)} a year)</span>`;if(c.explicit===false)s=`<span class="note">vague: no definite value</span>`;return s}
+function renderDetail(){
+  const el=$("detail");const r=state.E&&state.E.fields[state.sel];if(!r){el.innerHTML=`<div class="empty">${state.E?"Select a field.":"Run reconciliation to see field decisions."}</div>`;return}
+  const f=r.f;const fld=f.kind==="loss"?"loss":f.field;const d=D();
+  const finalTxt=r.final?`<div class="v">${esc(fmtVal(fld,r.final.value))}</div><div class="src">${r.final.by==="advisor"?"Set by advisor · source: "+esc(r.final.src):esc(docLabel(d,r.final.src))}${r.final.src&&isEmail(r.final.src)&&!r.final.by?" · supersedes the exposure file":""}</div>`
+    :r.status==="Missing"?`<div class="v" style="color:var(--miss)">Missing</div><div class="src">Clears only when the document is added</div>`
+    :r.status==="Material change"?`<div class="v">${esc(fmtVal(fld,r.proposed?r.proposed.value:null))}</div><div class="src">Proposed from ${esc(docLabel(d,r.proposed?r.proposed.src:""))} · needs your acknowledgment before it goes to carriers</div>`
+    :`<div class="v" style="color:var(--bad)">Needs your decision</div><div class="src">${r.cands.filter(c=>c.value!=null).length} candidate values</div>`;
+  let ev=`<table class="ev"><tr><th>Source</th><th>Value</th><th>Evidence</th></tr>`;
+  if(r.prior&&r.prior.value!=null)ev+=`<tr class="clk" data-doc="prior_policy" data-q="${esc(r.prior.quote)}"><td><b>Last year</b><div class="note">Prior-year policy</div></td><td>${esc(fmtVal(fld,r.prior.value))}</td><td><div class="q">“${esc(r.prior.quote)}”</div><span class="vf">✓ verified</span></td></tr>`;
+  r.cands.forEach(c=>{const docId=c.cell?(c.cell.row==="internal"?"internal":"exposure"):c.src;ev+=`<tr class="clk" data-doc="${esc(docId)}" data-q="${esc(c.quote||"")}"><td><b>${esc(c.label)}</b>${c.computed?'<div class="note">computed by rules</div>':""}</td><td>${candDisplay(r,c)}</td><td>${c.quote?`<div class="q ${c.verified?"":"bad"}">“${esc(c.quote)}”</div><span class="vf ${c.verified?"":"no"}">${c.verified?"✓ verified word for word":"✗ not found in document"}</span>`:c.cell?`<span class="note">${c.cell.row==="internal"?"Account record":c.cell.row==="header"?"File header":"Row "+esc(c.cell.row)} · ${esc(c.cell.col==="*"?"all columns":c.cell.col)}</span>`:""}</td></tr>`});
+  ev+=`</table>`;
+  const chk=r.checks.length?r.checks.map(c=>c.list?`<div class="checks"><div class="hd">Can ${esc(c.label)} supersede the file? ${c.list.every(x=>x.ok)?'<span class="ok">Yes: all 5 hold</span>':'<span class="no">No</span>'}</div>${c.list.map(x=>`<div class="ch"><span class="${x.ok?"ok":"no"}">${x.ok?"✓":"✗"}</span><span>${x.name}</span><span>${esc(x.detail)}</span></div>`).join("")}</div>`:`<div class="checks"><div class="ch"><span class="${c.ok?"ok":"no"}">${c.ok?"✓":"✗"}</span><span>${c.name}</span><span>${esc(c.detail)}</span></div></div>`).join(""):"";
+  const rk=[...new Set([f.kind==="meta"?"metaAuthority":null,f.kind==="exposure"?"exposureAuthority":null,r.checks.some(c=>c.list)?"emailGate":null,r.checks.some(c=>c.list)?"contacts":null,r.materiality&&r.materiality.rule,r.materiality&&r.materiality.rule==="materialPct"||r.materiality&&r.materiality.rule==="nonRating"?"ratingBases":null,f.total?"totals":null,...(r.rules||[])].filter(Boolean))];
+  const mat=(r.materiality?`<div class="lab">Materiality</div><div class="why">${r.materiality.flag?'<span class="pill s-Material">Material</span> ':""}${esc(r.materiality.reason)}${ruleTag(r.materiality.rule)}</div>`:"")+
+    (rk.length?`<div class="lab">Rules applied · where each comes from</div><table class="rules">${rk.map(k=>`<tr><td>${esc(RULE_META[k].label)}</td><td>${ruleTag(k)}</td><td class="note">${esc(RULE_META[k].basis)}</td></tr>`).join("")}</table>`:"");
+  let act="";
+  if(r.resolved){act=`<div class="decided"><b>${({acknowledge:"Acknowledged",override:"Overridden",confirm:"Confirmed"})[r.decision.type]||"Resolved"} by advisor</b> · ${esc(fmtVal(fld,r.decision.value))} (source: ${esc(r.decision.src)})<br><span class="note">Note: ${esc(r.decision.note)}</span><div class="row-btns"><button class="btn sm" id="undoBtn">Undo</button></div></div>`}
+  else if(r.status==="Missing"){act=`<div class="act"><b>Missing document</b><div class="note">Ready to market stays blocked until the document is added and reconciled. No override.</div><div class="row-btns"><button class="btn sm" id="fuBtn">${state.followups[r.id]?"✓ In client requests":"Add to client requests"}</button>${heldFor(r)?`<button class="btn sm" id="simBtn">Demo: client sends the document</button>`:""}</div></div>`}
+  else if(r.status==="Conflict"){const opts=r.cands.filter(c=>c.value!=null);act=`<div class="act"><b>Resolve conflict</b><div class="note">Pick the value that goes to carriers. A note is required.</div>${opts.map((c,i)=>`<label class="opt"><input type="radio" name="pick" value="${i}"><span>${candDisplay(r,c)} <span class="note">· ${esc(c.label)}</span></span></label>`).join("")}${opts.some(c=>c.period==="monthly")?opts.filter(c=>c.period==="monthly").map((c,i)=>`<label class="opt"><input type="radio" name="pick" value="m${i}"><span>${fmtMoney(c.value*12)} <span class="note">· ${esc(c.label)}, converted to annual</span></span></label>`).join(""):""}<label class="opt"><input type="radio" name="pick" value="other"><span>Other value <input type="text" id="otherVal" placeholder="e.g. 18" style="width:140px;margin-left:6px"></span></label>
+    <textarea id="decNote" placeholder="Why (e.g. confirmed with Dana by phone 11/12)"></textarea><div class="row-btns"><button class="btn primary sm" id="resolveBtn">Resolve</button><button class="btn sm" id="fuBtn">${state.followups[r.id]?"✓ In client requests":"Add to client requests"}</button></div></div>`}
+  else if(r.paused){act=`<div class="act"><b>Auto-settle is paused</b><div class="note">The rules would settle this as ${esc(r.ruleStatus)}${r.ruleFinal?" = "+esc(fmtVal(fld,r.ruleFinal.value)):""}. While paused, a person confirms every value.</div><textarea id="decNote">Checked against the source.</textarea><div class="row-btns"><button class="btn primary sm" id="confBtn">Confirm value</button></div></div>`}
+  else if(r.status==="Material change"){act=`<div class="act"><b>Acknowledge material change</b><div class="note">Confirms the value and what carriers should be told.</div><textarea id="decNote">${esc(r.suggest||"")}</textarea><div class="row-btns"><button class="btn primary sm" id="ackBtn">Acknowledge for submission</button></div></div>`}
+  else{const opts=r.cands.filter(c=>c.value!=null&&!(r.final&&c.src===r.final.src&&c.value===r.final.value));act=`<details class="act"><summary style="cursor:pointer;font-weight:600">Override (optional)</summary>${opts.length?opts.map((c,i)=>`<label class="opt"><input type="radio" name="pick" value="${i}"><span>${candDisplay(r,c)} <span class="note">· ${esc(c.label)}</span></span></label>`).join(""):'<div class="note">No other source values.</div>'}<label class="opt"><input type="radio" name="pick" value="other"><span>Other value <input type="text" id="otherVal" style="width:140px;margin-left:6px"></span></label><textarea id="decNote" placeholder="Why override the rules?"></textarea><div class="row-btns"><button class="btn sm" id="ovBtn">Override</button></div></details>`}
+  const sig=state.X?state.X.obs.filter(o=>o.field===f.field&&((f.loc&&o.loc===f.loc)||(!f.loc&&o.loc==null))):[];const sigL=state.X&&f.kind==="loss"?state.X.loss.filter(e=>e.line===f.line):[];
+  const sigHtml=`<details class="trace"><summary>What Claude passed to the rules for this field (${sig.length+sigL.length} signal${sig.length+sigL.length===1?"":"s"})</summary>
+    ${sig.length||sigL.length?`<table class="ev" style="margin-top:6px"><tr><th>Document</th><th>Signals</th><th>Used by rules?</th></tr>${sig.map(o=>`<tr><td>${esc(docLabel(d,o.doc))}</td><td><span class="note">field</span> ${esc(o.field)} · <span class="note">location</span> ${esc(o.loc||"whole account")} · <span class="note">value</span> ${esc(o.value==null?"null":o.value)} · <span class="note">period</span> ${esc(o.period)} · <span class="note">explicit</span> ${o.explicit} · <span class="note">confidence</span> ${esc(o.confidence||"—")}<div class="q ${o.verified?"":"bad"}">“${esc(o.quote)}”</div></td><td><span class="note">All except confidence. Quote ${o.verified?"verified":"NOT verified"}; ${o.doc==="prior_policy"?"sets last year's baseline":isEmail(o.doc)?"tested against the 5 conditions":"evidence"}</span></td></tr>`).join("")}${sigL.map(e=>`<tr><td>${esc(docLabel(d,e.doc))}</td><td><span class="note">line</span> ${e.line} · <span class="note">valued</span> ${fmtDate(e.valued)} · <span class="note">claims</span> ${e.claims.length}<div class="q ${e.verified?"":"bad"}">“${esc(e.quote)}”</div></td><td><span class="note">Valuation age, claims this term, open / ≥ ${fmtMoney(RULES.largeClaim)}</span></td></tr>`).join("")}</table>`:`<div class="note" style="margin-top:6px">Nothing. ${f.kind==="meta"||f.kind==="schedule"?"This field comes from the structured sources, parsed by code.":"Rules used the structured sources and the backstops only."}</div>`}</details>`;
+  const tr=`<details class="trace"><summary>Trace: source values → rule decision → advisor action → final state</summary>
+    <div class="step"><span class="n">1</span><div><b>Source values</b><br>${r.prior&&r.prior.value!=null?`Last year (prior policy): ${esc(fmtVal(fld,r.prior.value))}<br>`:""}${r.cands.map(c=>`${esc(c.label)}: ${c.backstop?"mentioned, no value":c.value==null?"—":esc(fmtVal(fld,c.value))+(c.period==="monthly"?" /month":"")}`).join("<br>")||"None"}</div></div>
+    <div class="step"><span class="n">2</span><div><b>Rule decision</b><br>${esc(r.ruleStatus)}${r.ruleAuto?" · settled automatically":" · routed to advisor"}${r.ruleFinal?` → ${esc(fmtVal(fld,r.ruleFinal.value))} from ${esc(r.ruleFinal.src)}`:""}<br><span class="note">${esc(r.why)}</span></div></div>
+    <div class="step"><span class="n">3</span><div><b>Advisor action</b><br>${r.decision?`${esc(r.decision.type)} → ${esc(fmtVal(fld,r.decision.value))} · "${esc(r.decision.note)}" · ${r.decision.at.toLocaleTimeString()}`:r.status==="Missing"?"Waiting on the client's document":MUST.has(r.status)?"Pending":"None needed"}</div></div>
+    <div class="step"><span class="n">4</span><div><b>Final state</b><br>${r.final?`${esc(fmtVal(fld,r.final.value))} · ${r.final.by==="advisor"?"advisor":esc(r.final.src)} · ${r.resolved||!MUST.has(r.status)?"ready for submission":"blocked"}`:"Blocks Ready to market"}</div></div></details>`;
+  el.innerHTML=`<div class="dtitle"><h3>${esc(r.label)}</h3><span class="pill ${pillClass(r.status)}">${r.status}</span></div>
+    <div class="final">${finalTxt}</div><div class="why">${esc(r.why)}</div>
+    ${r.notes.map(n=>`<div class="note">• ${esc(n)}</div>`).join("")}
+    <div class="lab">Evidence (click to see it in the source)</div>${ev}
+    ${chk?`<div class="lab">Source-of-truth checks</div>${chk}`:""}${mat}
+    ${r.suggest&&r.status==="Material change"?`<div class="lab">Suggested carrier note</div><div class="sugg">${esc(r.suggest)}</div>`:""}
+    ${r.followup&&MUST.has(r.status)&&!r.resolved?`<div class="lab">Suggested client question</div><div class="sugg">${esc(r.followup)}</div>`:""}
+    ${act}${sigHtml}${tr}`;
+  el.querySelectorAll("tr.clk").forEach(trr=>trr.onclick=()=>{state.tab=trr.dataset.doc;state.focusQ=trr.dataset.q;renderDocs()});
+  const pick=()=>{const p=el.querySelector('input[name=pick]:checked');if(!p)return null;const opts=r.status==="Conflict"?r.cands.filter(c=>c.value!=null):r.cands.filter(c=>c.value!=null&&!(r.final&&c.src===r.final.src&&c.value===r.final.value));
+    if(p.value==="other"){const v=$("otherVal").value.trim();if(!v)return null;const n=NUM_FIELDS.has(f.field)||f.kind==="loss"?toNum(v):v;return n==null?null:{value:n,src:"advisor entry"}}
+    if(p.value.startsWith("m")){const c=opts.filter(c=>c.period==="monthly")[+p.value.slice(1)];return{value:c.value*12,src:c.src+" (×12)"}}
+    const c=opts[+p.value];return{value:c.value,src:c.src}};
+  const need=(id)=>{const n=$("decNote");if(!n||!n.value.trim()){n&&(n.focus(),n.placeholder="A note is required");return null}return n.value.trim()};
+  if($("resolveBtn"))$("resolveBtn").onclick=()=>{const p=pick();if(!p){setStatus("Pick a value first.",true);return}const note=need();if(!note)return;decide(r.id,{type:"resolve",...p,note})};
+  if($("ovBtn"))$("ovBtn").onclick=()=>{const p=pick();if(!p){setStatus("Pick a value first.",true);return}const note=need();if(!note)return;decide(r.id,{type:"override",...p,note})};
+  if($("ackBtn"))$("ackBtn").onclick=()=>{const note=need();if(!note)return;decide(r.id,{type:"acknowledge",value:r.proposed?r.proposed.value:null,src:r.proposed?r.proposed.src:"exposure",note})};
+  if($("confBtn"))$("confBtn").onclick=()=>{const note=need();if(!note)return;decide(r.id,{type:"confirm",value:r.ruleFinal?r.ruleFinal.value:null,src:r.ruleFinal?r.ruleFinal.src:"",note})};
+  if($("undoBtn"))$("undoBtn").onclick=()=>{delete state.decisions[r.id];logLine(`Undo: ${r.label}`);recompute();renderAll()};
+  if($("fuBtn"))$("fuBtn").onclick=()=>{state.followups[r.id]=!state.followups[r.id];renderAll()};
+  if($("simBtn"))$("simBtn").onclick=()=>receiveDoc(heldFor(r));
+}
+function heldFor(r){const h=D().held_docs;if(!h||r.f.kind!=="loss")return null;return Object.keys(h).find(id=>!D().docs[id]&&LINE_HEADER[r.f.line].test(h[id].text))||null}
+async function receiveDoc(id){const d=D();const doc=d.held_docs[id];d.docs[id]=doc;logLine(`Document received: ${doc.title}`);let add=null;
+  if(state.mode==="live"&&state.sample){setStatus(`Claude is reading the new document: ${doc.title}…`);try{const r=await callClaude({...d,docs:{[id]:doc}},null);add=r.json;logLine(`Live extraction of ${id}: ${(r.ms/1000).toFixed(1)}s`)}catch(e){setStatus(`Couldn't read the new document: ${e&&e.message||e}`,true);delete d.docs[id];return}}
+  else add=(SAVED_HELD[state.ds]||{})[id]||{observations:[],loss_lines:[]};
+  const raw=JSON.parse(JSON.stringify(state.raw||{}));raw.observations=[...(raw.observations||[]),...(add.observations||[])];raw.loss_lines=[...(raw.loss_lines||[]),...(add.loss_lines||[])];
+  state.raw=raw;state.X=validateExtraction(d,raw);recompute();setStatus(`${doc.title} added and reconciled. Rules re-ran; your decisions were kept.`);renderAll()}
+function decide(id,d){d.at=new Date();state.decisions[id]=d;const r=state.E.fields[id];logLine(`Advisor ${d.type}: ${r.label} → ${d.value} (${d.note})`);setStatus(`${r.label}: ${d.type==="acknowledge"?"acknowledged":"resolved"}.`);recompute();renderAll()}
+function hlText(text,quotes,focus){let html=esc(text);const qs=[...new Set(quotes.filter(Boolean))].sort((a,b)=>b.length-a.length);
+  qs.forEach(q=>{const eq=esc(q).replace(/[.*+?^${}()|[\]\\]/g,"\\$&").replace(/\s+/g,"\\s+");try{html=html.replace(new RegExp(eq,"i"),m=>`<mark class="${normQ(q)===normQ(focus)?"on":""}">${m}</mark>`)}catch(e){}});return html}
+function renderDocs(){
+  const d=D();const r=state.E&&state.E.fields[state.sel];
+  const quotes={};const cells=[];if(r){if(r.prior&&r.prior.quote)(quotes.prior_policy=quotes.prior_policy||[]).push(r.prior.quote);r.cands.forEach(c=>{if(c.quote)(quotes[c.src]=quotes[c.src]||[]).push(c.quote);if(c.cell)cells.push(c.cell)})}
+  const emailIds=Object.keys(d.docs).filter(isEmail);
+  const tabs=[["internal","Internal data",cells.some(c=>c.row==="internal")],["exposure","Exposure file",cells.some(c=>c.row!=="internal")],["prior_policy","Prior policy",!!quotes.prior_policy],["loss_runs","Loss runs",!!quotes.loss_runs||(r&&r.f.kind==="loss")],["emails",`Emails (${emailIds.length})`,emailIds.some(id=>quotes[id])]];
+  let tab=state.tab;if(tab&&isEmail(tab))tab="emails";if(!tab){tab=(tabs.find(t=>t[2]&&t[0]!=="prior_policy")||tabs.find(t=>t[2])||tabs[1])[0]}
+  $("tabs").innerHTML=tabs.map(t=>`<span class="tab ${t[0]===tab?"on":""}" data-t="${t[0]}">${t[1]}${t[2]?'<span class="dot"></span>':""}</span>`).join("");
+  $("tabs").querySelectorAll(".tab").forEach(el=>el.onclick=()=>{state.tab=el.dataset.t;state.focusQ=null;renderDocs()});
+  let h="";const focus=state.focusQ||"";
+  if(tab==="internal"){const i=d.internal;const hl=k=>cells.some(c=>c.row==="internal"&&c.col===k)?' style="background:var(--markOn)"':"";
+    h=`<div class="doc"><h4><span>Internal account data</span><span>${esc(i.system)}</span></h4><table class="kv">
+    <tr><td>Named insured</td><td${hl("named_insured")}>${esc(i.named_insured)}</td></tr><tr><td>Policy number</td><td${hl("policy_number")}>${esc(i.policy_number)}</td></tr>
+    <tr><td>Policy period</td><td>${esc(i.policy_period)}</td></tr><tr><td>Renewal effective</td><td>${fmtDate(parseISO(i.renewal_effective))}</td></tr><tr><td>Insurer</td><td>${esc(i.insurer)}</td></tr>
+    <tr><td>Lines marketed</td><td>${i.lines.map(l=>LINE_NAME[l]).join(", ")}</td></tr><tr><td>Rating bases</td><td>${Object.entries(i.rating_bases).map(([l,b])=>`${LINE_NAME[l]}: ${FIELD_LABEL[b]||b}`).join("<br>")}</td></tr>
+    <tr><td>Locations on file</td><td>${i.locations.join(", ")}</td></tr><tr><td>Authorized client contacts</td><td>${i.contacts.map(c=>`${esc(c.name)}, ${esc(c.role)} · ${esc(c.email)} · ${c.authorized_for.includes("all")?"all exposures":c.authorized_for.map(x=>FIELD_LABEL[x]||x).join(", ")}`).join("<br>")}</td></tr></table></div>`}
+  else if(tab==="exposure"){const x=d.exposure;const hc=(row,col)=>cells.some(c=>c.row===row&&(c.col===col||c.col==="*"))?"hl on":"";
+    h=`<div class="doc"><h4><span>${esc(x.file)}</span><span>${fmtDate(parseISO(x.date))} · ${esc(x.prepared_by)}</span></h4><table class="xt"><tr><th>Header</th><th>Value</th></tr>
+    ${Object.entries(x.header).map(([k,v])=>`<tr><td>${esc(k.replace(/_/g," "))}</td><td class="${hc("header",k)}">${esc(typeof v==="number"?(k.includes("payroll")||k.includes("revenue")?fmtMoney(v):v.toLocaleString()):v)}</td></tr>`).join("")}</table>
+    <table class="xt" style="margin-top:8px"><tr><th>Location</th><th>Address</th><th>Operations</th><th>Employees</th><th>Annual payroll</th></tr>
+    ${x.rows.map(rw=>`<tr><td class="${hc(rw.loc,"*")}">${esc(rw.loc)}</td><td class="${hc(rw.loc,"*")}">${esc(rw.address)}</td><td class="${hc(rw.loc,"*")}">${esc(rw.operations)}</td><td class="${hc(rw.loc,"employees")}">${rw.employees}</td><td class="${hc(rw.loc,"payroll")}">${fmtMoney(rw.payroll)}</td></tr>`).join("")}</table></div>`}
+  else if(tab==="emails"){h=emailIds.map(id=>`<div class="doc" id="doc-${id}"><h4><span>${esc(d.docs[id].title.replace(/^Email: /,""))}</span><span>${fmtDate(emailMeta(d.docs[id]).date)}</span></h4><pre>${hlText(d.docs[id].text,quotes[id]||[],focus)}</pre></div>`).join("")}
+  else{const doc=d.docs[tab];h=doc?`<div class="doc"><h4><span>${esc(doc.title)}</span><span></span></h4><pre>${hlText(doc.text,quotes[tab]||[],focus)}</pre></div>`:`<div class="doc missing"><h4><span>${esc(tab)}</span><span>not provided</span></h4><p>Not in the file.</p></div>`;
+    if(tab==="loss_runs"&&r&&r.f.kind==="loss"&&r.status==="Missing"&&!LINE_HEADER[r.f.line].test(doc?doc.text:""))h=`<div class="doc missing"><h4><span>${LINE_NAME[r.f.line]} loss runs</span><span>not provided</span></h4><p>No ${LINE_NAME[r.f.line]} section in the loss runs received. Ready to market stays blocked.</p></div>`+h}
+  $("docs").innerHTML=h;const on=$("docs").querySelector("mark.on")||$("docs").querySelector("mark")||$("docs").querySelector("td.hl");if(on)on.scrollIntoView({block:"center",behavior:"smooth"});
+}
+function renderEval(){
+  const el=$("evalBody");if(!state.E){el.innerHTML='<div class="note">No run yet.</div>';$("evalSm").textContent="";return}
+  const RE=state.runE||state.E;const sc=score(state.ds,RE);if(!sc){el.innerHTML='<div class="note">No answer key for this client.</div>';return}const S=sc.S;const K=KEYS[state.ds];const openNow=blockers().length;const mustAtRun=Object.values(RE.fields).filter(r=>MUST.has(r.ruleStatus)).length;
+  $("evalSm").textContent=`${state.ds==="blind"?"blind key sha256 "+KEY_SHA.blind.slice(0,12)+"… frozen before any run":"demo key"} · ${state.lastRun?state.lastRun.mode+" run":""}`;
+  const k=(n,l,good)=>`<div class="kpi"><div class="n ${good===true?"pass":good===false?"fail":""}">${n}</div><div class="l">${l}</div></div>`;
+  let h=`<div class="kpis">${k(S.wrongAuto,"Wrong automatic resolutions",S.wrongAuto===0)}${k(`${S.mustRouted}/${S.must}`,"Must-review fields routed to the advisor",S.mustRouted===S.must)}${k(`${S.statusOk}/${S.n}`,"Status as the key says (incl. pre-registered safe alternatives)",S.statusOk===S.n?true:null)}${k(`${S.provOk}/${S.autoKey}`,"Auto-resolved with the right value and source",S.provOk===S.autoKey?true:null)}${S.matFlag!=null?k(S.matFlag?"Yes":"No","Concentration flagged material (T3)",S.matFlag):""}${k(openNow?`Blocked · ${openNow} open`:"Open · all resolved","Ready to market gate (blocked by every unresolved item)",true)}</div><p class="note">Scored on the rules' routing for this run, before any advisor action or new document. Advisor decisions change the workbench, not the score.</p>`;
+  if(state.forced)h+=`<p><b>Forced-high-confidence replay:</b> every confidence set to "high" → <span class="${state.forced.same===state.forced.total?"pass":"fail"}">${state.forced.same}/${state.forced.total} fields unchanged</span>. Confidence never changes a status.</p>`;
+  else h+=`<p><button class="btn sm" id="forceBtn">Replay with every AI confidence forced to "high"</button> <span class="note">Safety must not depend on the model being cautious.</span></p>`;
+  h+=`<table class="sc"><tr><th>Field</th><th>Trap</th><th>Key</th><th>Rules</th><th>Result</th></tr>${sc.rows.map(x=>`<tr><td>${esc(x.r?x.r.label:x.id)}</td><td>${esc(x.k.trap||"")}</td><td>${esc(x.k.expected_status)}${x.k.auto_value!=null?" · "+esc(fmtVal(x.r&&x.r.f.kind==="loss"?"loss":x.r?x.r.f.field:"",x.k.auto_value))+" @ "+esc(x.k.auto_source):""}</td><td>${x.miss?"—":esc(x.st)+(x.auto&&x.fin?" · "+esc(fmtVal(x.r.f.kind==="loss"?"loss":x.r.f.field,x.fin.value))+" @ "+esc(x.fin.src):"")}</td><td class="${x.label==="Pass"?"pass":x.label.startsWith("Pass")||x.label.startsWith("Routed")||x.label==="Over-escalated"?"warn":"fail"}">${esc(x.label)}${x.why?" ("+esc(x.why)+")":""}</td></tr>`).join("")}</table>`;
+  if(sc.extras.length)h+=`<p class="note">Fields produced but not in the key: ${sc.extras.join(", ")}</p>`;
+  const R=state.runs[state.ds].filter(r=>r.score);
+  if(R.length){h+=`<h4 style="margin:14px 0 6px">Run history · ${esc(D().label)}</h4><table class="sc"><tr><th>Run</th><th>Mode</th><th>Time</th><th>Wrong auto</th><th>Must-review routed</th><th>Status match</th><th>Validation problems</th></tr>${R.map(r=>`<tr><td>#${r.n}</td><td>${r.mode}</td><td>${r.ms?(r.ms/1000).toFixed(1)+"s":"—"}</td><td class="${r.score.wrongAuto?"fail":"pass"}">${r.score.wrongAuto}</td><td class="${r.score.mustRouted===r.score.must?"pass":"fail"}">${r.score.mustRouted}/${r.score.must}</td><td>${r.score.statusOk}/${r.score.n}</td><td>${r.problems}</td></tr>`).join("")}</table>`;
+    const live=R.filter(r=>r.mode==="live");if(live.length>1){const ids=Object.keys(live[0].statuses);const same=ids.filter(id=>live.every(r=>r.statuses[id]===live[0].statuses[id]));const varied=ids.filter(id=>!same.includes(id));
+      h+=`<p><b>Consistency across ${live.length} live runs:</b> ${same.length}/${ids.length} fields got the same status and value every time.${varied.length?" Varied: "+varied.join(", "):""}</p>`}}
+  el.innerHTML=h;if($("forceBtn"))$("forceBtn").onclick=forcedHigh;
+}
+function renderFollowups(){const el=$("fuBody");if(!state.E){el.innerHTML='<div class="note">No run yet.</div>';return}
+  const open=Object.values(state.E.fields).filter(r=>(r.status==="Conflict"||r.status==="Missing")&&!r.resolved&&r.followup);
+  if(!open.length){el.innerHTML='<div class="note">Nothing to ask the client.</div>';return}
+  const name=(D().internal.contacts[0]||{}).name||"";
+  el.innerHTML=`<p class="note">One batched email instead of one-off follow-ups. ${Object.values(state.followups).filter(Boolean).length} added from field cards; all open items listed.</p><div class="doc"><h4><span>Draft to ${esc(name)}</span><span>not sent</span></h4><pre>Hi ${esc(name.split(" ")[0])},\n\nBefore we take your ${fmtDate(parseISO(D().internal.renewal_effective))} renewal to market, we need to confirm a few items:\n\n${open.map((r,i)=>`${i+1}. ${r.followup}`).join("\n")}\n\nThanks,\n${esc(D().internal.account_manager)}</pre></div>`}
+function renderRaw(){$("raw").textContent=state.raw?JSON.stringify(state.raw,null,2):"No run yet.";$("probs").innerHTML=state.X&&state.X.problems.length?`<p class="fail">Validation problems (${state.X.problems.length}): each sends the affected field to the advisor.</p><ul>${state.X.problems.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`:state.X?'<p class="pass">Every observation validated and every quote verified word for word.</p>':""}
+function renderLog(){$("logBody").innerHTML=state.log.length?`<pre class="raw">${esc(state.log.join("\n"))}</pre>`:'<div class="note">Nothing yet.</div>'}
+function rulesRegister(){return`<div class="lab">Rules in force and where each comes from</div><p class="note">Prototype defaults are our assumptions for this synthetic case, not universal insurance rules. In production each would be set by the client, the carrier, the advisor, or read from the system of record, and changes go through change approval.</p><table class="rules"><tr><th>Rule</th><th>Source</th><th>Basis</th></tr>${Object.keys(RULE_META).map(k=>`<tr><td>${esc(RULE_META[k].label)}</td><td>${ruleTag(k)}</td><td class="note">${esc(RULE_META[k].basis)}</td></tr>`).join("")}</table><p class="note">Available sources: ${Object.values(RULE_SRC).join(" · ")}.</p>`}
+function renderHow(){$("howBody").innerHTML=HOW_HTML+rulesRegister();$("prodBody").innerHTML=PROD_HTML}
+function openExport(){const E=state.E;const d=D();const F=Object.values(E.fields);
+  const mats=F.filter(r=>r.ruleStatus==="Material change"||(r.materiality&&r.materiality.flag));
+  const rows=F.map(r=>{const fld=r.f.kind==="loss"?"loss":r.f.field;return`<tr><td>${esc(r.label)}</td><td>${esc(fmtVal(fld,r.final?r.final.value:null))}</td><td>${esc(r.final?(r.final.by==="advisor"?"Advisor: "+r.final.src:docLabel(d,r.final.src)):"")}</td><td>${r.decision?esc(r.decision.note):"Settled by rules"}</td></tr>`}).join("");
+  const json={client:d.internal.named_insured,renewal:d.internal.renewal_effective,generated:new Date().toISOString(),facts:F.map(r=>({field:r.id,value:r.final?r.final.value:null,source:r.final?r.final.src:null,resolved_by:r.final&&r.final.by==="advisor"?"advisor":"rules",note:r.decision?r.decision.note:null,status_from_rules:r.ruleStatus}))};
+  $("mbox").innerHTML=`<h3>Submission package · ${esc(d.internal.named_insured)}</h3><div class="note">Every fact below is resolved and traceable to its source. Carrier-specific forms would be filled from this package (out of scope for the MVP).</div>
+  <div class="lab">Material changes to tell carriers</div><ul>${mats.map(r=>`<li><b>${esc(r.label)}</b>: ${esc(r.decision?r.decision.note:r.materiality.reason)}</li>`).join("")||"<li>None</li>"}</ul>
+  <div class="lab">Resolved facts</div><table class="sc"><tr><th>Field</th><th>Value</th><th>Source</th><th>Advisor note</th></tr>${rows}</table>
+  <div class="row-btns" style="margin-top:12px"><button class="btn primary" id="copyJson">Copy as JSON</button><button class="btn" id="closeM">Close</button></div><pre class="raw" id="jsonOut" style="display:none"></pre>`;
+  $("modal").classList.add("show");$("closeM").onclick=()=>$("modal").classList.remove("show");
+  $("copyJson").onclick=()=>{const t=JSON.stringify(json,null,2);$("jsonOut").style.display="block";$("jsonOut").textContent=t;try{navigator.clipboard.writeText(t)}catch(e){}};logLine("Opened submission package")}
+function renderPause(){const b=$("pauseBtn");b.className="btn"+(state.paused?" paused":"");b.textContent=state.paused?"Auto-settle paused · resume":"Pause auto-settle";
+  const el=$("pauseBanner");const on=state.paused||state.autoPaused;el.hidden=!on;
+  el.textContent=state.paused?"Kill switch on: the rules settle nothing automatically. Every field needs an advisor's confirmation before Ready to market.":state.autoPaused?`Automatic stop: this run had ${state.X&&state.X.empty?"no usable AI output":state.X.problems.length+" validation problems (limit "+(AUTO_PAUSE_PROBLEMS-1)+")"}, so auto-settle paused itself. Every field needs an advisor. Re-run or load the last good run.`:""}
+function renderAll(){renderPause();renderControls();renderClient();renderBar();renderTable();renderDetail();renderDocs();renderEval();renderFollowups();renderRaw()}
+
+/* ============================================================
+   10. Wiring
+   ============================================================ */
+function switchDs(ds){if(state.busy)return;state.runE=null;Object.keys(DATA[ds].held_docs||{}).forEach(id=>delete DATA[ds].docs[id]);state.ds=ds;state.X=null;state.E=null;state.raw=null;state.decisions={};state.sel=null;state.tab=null;state.filter="all";state.forced=null;
+  history.replaceState(null,"",ds==="blind"?"#blind":"#");state.mode=SAVED[ds]?"saved":(state.sample?"live":"saved");
+  if(SAVED[ds])runSaved();else{renderAll();setStatus(state.sample?"Blind test client: answer key frozen before any run. Click Run 3× live.":"Blind test client: live Claude runs only (open on claude.ai).")}}
+$("dsDev").onclick=()=>switchDs("dev");$("dsBlind").onclick=()=>switchDs("blind");
+$("mSaved").onclick=()=>{state.mode="saved";renderControls()};$("mLive").onclick=()=>{state.mode="live";renderControls()};
+$("runBtn").onclick=()=>state.mode==="live"?runLive(1):runSaved();$("run3Btn").onclick=()=>runLive(3);
+$("stopBtn").onclick=()=>state.ctl&&state.ctl.abort();
+$("pauseBtn").onclick=()=>{state.paused=!state.paused;logLine(state.paused?"Kill switch: auto-settle paused by advisor":"Auto-settle resumed");recompute();renderAll()};$("readyBtn").onclick=()=>{if(!blockers().length)openExport()};
+$("modal").onclick=e=>{if(e.target.id==="modal")$("modal").classList.remove("show")};
+window.__engine={runEngine,validateExtraction,score,DATA,KEYS,buildPrompt,load:(ds,json)=>{switchDs(ds);process(json,{mode:"injected"})},state};
+renderHow();
+if(SAVED[state.ds])runSaved();else switchDs(state.ds);
+(async()=>{try{state.sample=window.claude?await window.claude.use("sample"):null}catch(e){state.sample=null}renderControls();
+  if(state.sample){state.mode=SAVED[state.ds]?state.mode:"live";renderControls();setStatus(state.ds==="dev"?"Saved Claude run loaded. Switch to Live Claude to re-run, or open the blind test client.":"Blind test client: click Run 3× live.")}})();
+</script>
+</body>
+</html>

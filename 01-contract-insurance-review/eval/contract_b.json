@@ -1,0 +1,64 @@
+{
+  "id": "contract-b",
+  "title": "Subcontract Agreement",
+  "parties": "Atlas Construction Group, Inc. (“Contractor”) and Brightline Facility Services, Inc. (“Subcontractor”) — St. Brendan Medical Center East Tower Project",
+  "pages": [
+    { "page": 1, "sections": [
+      { "heading": "1. Contract Documents", "insurance": false, "paras": [
+        { "ref": "1.1", "text": "This Subcontract Agreement is entered into between Contractor and Subcontractor for mechanical and building systems work on the St. Brendan Medical Center East Tower Project (the “Project”), owned by St. Brendan Health, Inc. (“Owner”)." },
+        { "ref": "1.2", "text": "The Subcontract Documents consist of this Agreement and Exhibits A (Scope of Work), B (Schedule), C (Pricing), and D (Owner Site Requirements), each of which is attached and made part of this Agreement." },
+        { "ref": "1.3", "text": "If this Agreement and an Exhibit impose different requirements on the same subject, Subcontractor shall comply with the more stringent requirement." } ] },
+      { "heading": "2. Scope of Work", "insurance": false, "paras": [
+        { "ref": "2.1", "text": "Subcontractor shall furnish all labor, materials, equipment, and supervision required to install, test, and commission the HVAC and building automation systems described in Exhibit A." },
+        { "ref": "2.2", "text": "Subcontractor shall coordinate its work with other trades and shall attend weekly coordination meetings scheduled by Contractor." } ] } ] },
+    { "page": 2, "sections": [
+      { "heading": "3. Schedule", "insurance": false, "paras": [
+        { "ref": "3.1", "text": "Subcontractor shall begin work on the date stated in Contractor’s notice to proceed and shall achieve substantial completion of its work in accordance with Exhibit B." },
+        { "ref": "3.2", "text": "Time is of the essence. Subcontractor shall notify Contractor in writing within five (5) days of any event it believes will delay its work." } ] },
+      { "heading": "4. Payment", "insurance": false, "paras": [
+        { "ref": "4.1", "text": "Contractor shall pay Subcontractor the amounts set out in Exhibit C, less retainage of ten percent (10%), within ten (10) days after Contractor receives payment from Owner for Subcontractor’s work." },
+        { "ref": "4.2", "text": "Each payment application shall include conditional lien waivers from Subcontractor and its suppliers." } ] },
+      { "heading": "5. Changes", "insurance": false, "paras": [
+        { "ref": "5.1", "text": "Contractor may order changes to the work by written change order. Subcontractor shall not proceed with any change without a signed change order or written directive." } ] } ] },
+    { "page": 3, "sections": [
+      { "heading": "6. Subcontractor’s Tools and Equipment", "insurance": false, "paras": [
+        { "ref": "6.1", "text": "Subcontractor is solely responsible for its tools, equipment, and materials stored at the Project site until they are incorporated into the work." },
+        { "ref": "6.2", "text": "Contractor recommends, but does not require, that Subcontractor carry an inland marine or equipment floater policy covering its tools and equipment while at the Project site." } ] },
+      { "heading": "7. Safety", "insurance": false, "paras": [
+        { "ref": "7.1", "text": "Subcontractor shall comply with Contractor’s site safety program and all applicable OSHA regulations, and shall designate a competent person on site at all times." } ] },
+      { "heading": "8. Warranty", "insurance": false, "paras": [
+        { "ref": "8.1", "text": "Subcontractor warrants its work against defects in materials and workmanship for one (1) year after substantial completion of the Project." } ] } ] },
+    { "page": 4, "sections": [
+      { "heading": "9. Indemnification", "insurance": false, "paras": [
+        { "ref": "9.1", "text": "To the fullest extent permitted by law, Subcontractor shall defend, indemnify, and hold harmless Contractor and Owner from claims for bodily injury, property damage, and related expenses arising out of the performance of Subcontractor’s work." },
+        { "ref": "9.2", "text": "Subcontractor’s obligations under this Section 9 are not limited by the amount or type of insurance Subcontractor carries." } ] },
+      { "heading": "10. Risk of Loss", "insurance": false, "paras": [
+        { "ref": "10.1", "text": "Subcontractor bears the risk of loss to its work until final acceptance by Owner." },
+        { "ref": "10.2", "text": "Subcontractor shall promptly repair any damage to the work of other trades caused by Subcontractor or its lower-tier subcontractors." },
+        { "ref": "10.3", "text": "Subcontractor waives all rights of recovery against Contractor and Owner to the extent of any loss covered by its commercial general liability, business automobile, and workers’ compensation insurance, and shall obtain endorsements from its insurers waiving subrogation in favor of Contractor and Owner on each of those policies." } ] },
+      { "heading": "11. Dispute Resolution", "insurance": false, "paras": [
+        { "ref": "11.1", "text": "The parties shall attempt in good faith to resolve any dispute through negotiation between senior executives before commencing litigation." } ] } ] },
+    { "page": 5, "sections": [
+      { "heading": "12. Insurance", "insurance": true, "paras": [
+        { "ref": "12.1", "text": "Before starting work, Subcontractor shall obtain and thereafter maintain the following insurance with insurers authorized to do business in the state where the Project is located." },
+        { "ref": "12.2(a)", "text": "Commercial general liability insurance with limits of not less than $1,000,000 each occurrence and $2,000,000 general aggregate." },
+        { "ref": "12.2(b)", "text": "Business automobile liability insurance with a combined single limit of not less than $1,000,000 per accident." },
+        { "ref": "12.2(c)", "text": "Workers’ compensation insurance as required by law and employer’s liability insurance with limits of not less than $1,000,000 each accident." },
+        { "ref": "12.2(d)", "text": "Contractor’s pollution liability insurance with limits of not less than $2,000,000 per occurrence, covering pollution conditions arising from Subcontractor’s work." },
+        { "ref": "12.3", "text": "The limits required in this Section 12 may be satisfied by any combination of primary and umbrella or excess liability insurance." } ] } ] },
+    { "page": 6, "sections": [
+      { "heading": "12. Insurance (continued)", "insurance": true, "paras": [
+        { "ref": "12.4", "text": "Contractor, Owner, and their respective officers and employees shall be included as additional insureds under Subcontractor’s commercial general liability policy with respect to liability arising out of Subcontractor’s work." },
+        { "ref": "12.5", "text": "Subcontractor’s insurance shall be primary and non-contributory with respect to any insurance maintained by Contractor or Owner." },
+        { "ref": "12.6", "text": "Subcontractor shall furnish certificates of insurance and copies of the required endorsements to Contractor before starting work." },
+        { "ref": "12.7", "text": "Subcontractor shall give Contractor at least thirty (30) days’ prior written notice of cancellation, non-renewal, or material reduction of any required coverage." },
+        { "ref": "12.8", "text": "Subcontractor shall also comply with all insurance and enrollment requirements of the Owner Controlled Insurance Program Manual issued by Owner, which is incorporated into this Agreement by reference." } ] },
+      { "heading": "13. Termination", "insurance": false, "paras": [
+        { "ref": "13.1", "text": "Contractor may terminate this Agreement for cause if Subcontractor fails to cure a material default within seven (7) days after written notice." } ] } ] },
+    { "page": 7, "sections": [
+      { "heading": "Exhibit D — Owner Site Requirements", "insurance": false, "paras": [
+        { "ref": "D.1", "text": "All trade contractor personnel shall obtain an Owner-issued site badge and complete hospital infection control training before entering occupied areas." },
+        { "ref": "D.2", "text": "All trade contractors shall carry commercial general liability insurance with limits of not less than $2,000,000 per occurrence and $4,000,000 general aggregate." },
+        { "ref": "D.3", "text": "Work in occupied patient areas shall be scheduled through Owner’s facilities department at least forty-eight (48) hours in advance." } ] } ] }
+  ]
+}

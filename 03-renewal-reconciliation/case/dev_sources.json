@@ -1,0 +1,122 @@
+{
+  "id": "dev",
+  "label": "Meridian Freight & Storage (demo client)",
+  "internal": {
+    "system": "Agency management system export",
+    "named_insured": "Meridian Freight & Storage, Inc.",
+    "policy_number": "CPP-3390417",
+    "policy_period": "01/01/2026 to 01/01/2027",
+    "period_start": "2026-01-01",
+    "renewal_effective": "2027-01-01",
+    "insurer": "Keystone Casualty Co.",
+    "account_manager": "Jordan Ellis",
+    "lines": [
+      "GL",
+      "WC",
+      "AUTO"
+    ],
+    "rating_bases": {
+      "GL": "payroll",
+      "WC": "payroll",
+      "AUTO": "power_units"
+    },
+    "locations": [
+      "Indianapolis",
+      "Fort Wayne",
+      "Carmel"
+    ],
+    "contacts": [
+      {
+        "name": "Elena Ruiz",
+        "email": "elena.ruiz@meridianfs.com",
+        "role": "CFO",
+        "authorized_for": [
+          "all"
+        ]
+      },
+      {
+        "name": "Tom Becker",
+        "email": "tom.becker@meridianfs.com",
+        "role": "Fleet Manager",
+        "authorized_for": [
+          "power_units"
+        ]
+      }
+    ]
+  },
+  "exposure": {
+    "file": "Meridian_Exposures_2027.xlsx",
+    "prepared_by": "Elena Ruiz",
+    "date": "2026-10-20",
+    "header": {
+      "named_insured": "Meridian Freight and Storage",
+      "policy_number": "CPP-3390417",
+      "annual_revenue": 61000000,
+      "power_units": 22,
+      "total_payroll": 7400000,
+      "total_employees": 149
+    },
+    "rows": [
+      {
+        "loc": "Indianapolis",
+        "address": "4100 W Raymond St, Indianapolis IN",
+        "operations": "Warehouse",
+        "employees": 64,
+        "payroll": 3400000
+      },
+      {
+        "loc": "Fort Wayne",
+        "address": "720 Ludwig Rd, Fort Wayne IN",
+        "operations": "Warehouse",
+        "employees": 41,
+        "payroll": 1460000
+      },
+      {
+        "loc": "Carmel",
+        "address": "11 Monument Cir, Carmel IN",
+        "operations": "Office",
+        "employees": 18,
+        "payroll": 1300000
+      },
+      {
+        "loc": "Lafayette",
+        "address": "3500 Sagamore Pkwy, Lafayette IN",
+        "operations": "Cross-dock, forklift operations",
+        "employees": 26,
+        "payroll": 1240000
+      }
+    ]
+  },
+  "docs": {
+    "prior_policy": {
+      "title": "Prior-year policy (declarations excerpt)",
+      "text": "COMMERCIAL PACKAGE POLICY: DECLARATIONS (EXCERPT)\nPolicy number: CPP-3390417\nNamed insured: Meridian Freight & Storage, Inc.\nPolicy period: 01/01/2026 to 01/01/2027\nInsurer: Keystone Casualty Co.\n\nSCHEDULE OF LOCATIONS\nLoc 1: 4100 W Raymond St, Indianapolis IN | Warehouse | Employees: 60 | Annual payroll: $3,250,000\nLoc 2: 720 Ludwig Rd, Fort Wayne IN | Warehouse | Employees: 38 | Annual payroll: $1,580,000\nLoc 3: 11 Monument Cir, Carmel IN | Office | Employees: 18 | Annual payroll: $1,270,000\n\nGENERAL LIABILITY RATING BASIS\nTotal annual payroll: $6,100,000\nTotal employees: 116\nReported annual revenue (informational, not rated): $50,000,000\n\nCOMMERCIAL AUTO\nScheduled power units: 20"
+    },
+    "loss_runs": {
+      "title": "Loss runs",
+      "text": "LOSS RUN REPORT: Keystone Casualty Co.\nInsured: Meridian Freight & Storage, Inc.\n\nGENERAL LIABILITY (valued as of 10/05/2026)\nClaim GL-25-0091 | Date of loss 04/02/2025 | Trip over pallet, Indianapolis | Closed | Incurred $22,400\nClaim GL-26-0317 | Date of loss 05/18/2026 | Damaged customer freight | Closed | Incurred $8,200\n\nWORKERS COMPENSATION (valued as of 06/30/2026)\nClaim WC-26-0044 | Date of loss 02/11/2026 | Back strain, loading | Closed | Incurred $6,900\n\nCOMMERCIAL AUTO (valued as of 10/01/2026)\nClaim CA-26-0508 | Date of loss 08/14/2026 | Intersection collision, tractor 12 | Open | Incurred $60,000\n\nEnd of report."
+    },
+    "email_1": {
+      "title": "Email: Renewal exposure file",
+      "text": "From: Elena Ruiz <elena.ruiz@meridianfs.com>\nDate: 10/20/2026\nSubject: Renewal exposure file\n\nHi Jordan, attached is our updated exposure file for the January 1 renewal. Loss runs from Keystone are attached as well. Best, Elena"
+    },
+    "email_2": {
+      "title": "Email: Correction, Fort Wayne payroll",
+      "text": "From: Elena Ruiz <elena.ruiz@meridianfs.com>\nDate: 10/29/2026\nSubject: Correction, Fort Wayne payroll\n\nJordan, correction to the exposure file: Fort Wayne payroll should be $1,640,000 for the year, not $1,460,000. The digits were transposed. Elena"
+    },
+    "email_3": {
+      "title": "Email: Headcount",
+      "text": "From: Accounts Payable <ap@meridianfs.com>\nDate: 11/03/2026\nSubject: Headcount\n\nFYI our headcount at Indianapolis is now 70. AP team"
+    },
+    "email_4": {
+      "title": "Email: Fleet count",
+      "text": "From: Tom Becker <tom.becker@meridianfs.com>\nDate: 11/06/2026\nSubject: Fleet count\n\nJordan, we're at 22 power units, same as the file. Tom"
+    }
+  },
+  "held_docs": {
+    "loss_runs_wc_update": {
+      "title": "Loss runs: workers comp update (received 11/12/2026)",
+      "text": "LOSS RUN REPORT: Keystone Casualty Co.\nInsured: Meridian Freight & Storage, Inc.\n\nWORKERS COMPENSATION (valued as of 11/05/2026)\nClaim WC-26-0044 | Date of loss 02/11/2026 | Back strain, loading | Closed | Incurred $6,900\n\nEnd of report."
+    }
+  }
+}

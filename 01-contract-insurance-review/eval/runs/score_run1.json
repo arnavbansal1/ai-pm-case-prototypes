@@ -1,0 +1,92 @@
+{
+ "stage1": {
+  "FOUND/TOTAL": "11/11",
+  "in_scope_found": "4/4",
+  "out_of_scope_surfaced": "6/6",
+  "MISSED": [],
+  "EXTRA": [
+   "Inland marine / equipment floater (recommended, not required) (6.2)"
+  ],
+  "quotes_verified (in-scope items)": "5/5",
+  "refs_correct (in-scope)": "4/4",
+  "unverified_oos_or_ext_quotes": [],
+  "GL_conflict": "FULL (a)",
+  "GL_entries": [
+   {
+    "ref": "D.2",
+    "values": {
+     "per_occurrence": 2000000,
+     "aggregate": 4000000
+    },
+    "status": "review",
+    "conf": "medium"
+   },
+   {
+    "ref": "12.2(a)",
+    "values": {
+     "per_occurrence": 1000000,
+     "aggregate": 2000000
+    },
+    "status": "review",
+    "conf": "medium"
+   }
+  ],
+  "AI_ambiguity": "PASS",
+  "external_ref_12.8": "FOUND",
+  "false_positive_trap_6.2": "TRIGGERED",
+  "WOS_lines": [
+   [
+    "cgl",
+    "auto",
+    "wc"
+   ]
+  ],
+  "excess_allowed_term": {
+   "allowed": true,
+   "condition": "none",
+   "ref": "12.3"
+  }
+ },
+ "stage2": [
+  {
+   "item": "GL limit (conflict: 12.2(a) vs D.2)",
+   "ref": "D.2",
+   "status": "review",
+   "result": "correct",
+   "reason": "Primary is short ($1M vs. $2M per occurrence; $2M vs. $4M aggregate). The umbrella would close the gap, and §12.3 allows excess that follows form, but our coverage data doesn’t confirm the umbrella follows form."
+  },
+  {
+   "item": "GL limit (conflict: 12.2(a) vs D.2)",
+   "ref": "12.2(a)",
+   "status": "review",
+   "result": "correct",
+   "reason": "Extraction confidence is low, so this is not marked Met. Primary limits meet or exceed every required limit."
+  },
+  {
+   "item": "Additional insured (ambiguous scope)",
+   "ref": "12.4",
+   "status": "review",
+   "result": "correct",
+   "reason": "Extraction confidence is low, so this is not marked Met. Endorsement scope covers every required operation type."
+  },
+  {
+   "item": "Waiver of subrogation (outside insurance section)",
+   "ref": "10.3",
+   "status": "met",
+   "result": "correct",
+   "reason": "The blanket waiver applies when a written contract requires it, and it covers every required policy."
+  },
+  {
+   "item": "Primary and non-contributory",
+   "ref": "12.5",
+   "status": "review",
+   "result": "correct",
+   "reason": "Our coverage data doesn’t say whether the policy has P&NC wording, so this can’t be confirmed and isn’t marked Met."
+  }
+ ],
+ "details": {
+  "ai_scope_extracted": [],
+  "ai_confidence": "medium",
+  "ai_plain": "Vendor must name Contractor, Owner, and their respective officers and employees as additional insureds on its CGL policy for liability arising out of Vendor's work. Confidence is medium because the contract does not say whether this covers ongoing operations, completed operations, or both, so no scope is listed."
+ }
+}

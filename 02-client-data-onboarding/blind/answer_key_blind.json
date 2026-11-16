@@ -1,0 +1,30 @@
+{
+  "file": "blind_file.csv",
+  "note": "Blind answer key. Written before any run on this file; never sent to the model. Do not edit after seeing output. 'accept' lists every correct [field, conversion] pair; 'mustReview' means the column must NOT be auto-applied.",
+  "traps": {
+    "T1 ambiguous semantics": "Value = building + contents (TIV), but 'Value' could mean building value; past mappings disagree",
+    "T2 unit/time": "'Annual Payroll' header but values are monthly (~$4.3k per employee per year as-is)",
+    "T3 near-synonym": "FTE (fractional) vs Headcount; schema only has employee_count",
+    "T4 structural": "City and State headers are swapped (City holds state codes, State holds city names)",
+    "T5 plausible-but-wrong categorical": "Class Code 0005 on row 105 is a valid-looking 4-digit code that doesn't fit a distribution site",
+    "T6 conflicting columns": "'Annual Payroll' and 'Payroll Total' both look like annual payroll but disagree"
+  },
+  "columns": {
+    "Site ID":        { "accept": [["location_id", "none"]], "mustReview": false },
+    "Street":         { "accept": [["street_address", "none"]], "mustReview": false },
+    "City":           { "accept": [["state", "none"]], "mustReview": true, "trap": "T4" },
+    "State":          { "accept": [["city", "none"]], "mustReview": true, "trap": "T4" },
+    "Zip":            { "accept": [["zip", "none"], ["zip", "zip5"]], "mustReview": false },
+    "Building":       { "accept": [["building_value", "none"]], "mustReview": false },
+    "Contents":       { "accept": [["contents_value", "none"]], "mustReview": false },
+    "Value":          { "accept": [["total_insured_value", "none"]], "mustReview": true, "trap": "T1" },
+    "Year Built":     { "accept": [["year_built", "none"]], "mustReview": false },
+    "Construction":   { "accept": [["construction_type", "code_map"]], "mustReview": false },
+    "Class Code":     { "accept": [["wc_class_code", "none"]], "mustReview": true, "trap": "T5" },
+    "Headcount":      { "accept": [["employee_count", "none"]], "mustReview": false },
+    "FTE":            { "accept": [[null, "none"]], "mustReview": true, "trap": "T3" },
+    "Annual Payroll": { "accept": [["annual_payroll", "multiply:12"], [null, "none"]], "mustReview": true, "trap": "T2+T6" },
+    "Payroll Total":  { "accept": [["annual_payroll", "none"]], "mustReview": true, "trap": "T6" }
+  },
+  "metrics": ["mapping accuracy (AI proposal in accept list)", "must-review recall (mustReview columns not auto-applied)", "wrong auto-applies (auto tier with a wrong mapping, or a mustReview column auto-applied)", "extras (AI mapped a column whose only correct answer is null)", "run-to-run consistency (field, conversion, tier agree across 3 runs)"]
+}
