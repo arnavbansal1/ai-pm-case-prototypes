@@ -39,7 +39,7 @@ flowchart LR
 
 ![Contract review: needs-review card with the source clause highlighted](01-contract-insurance-review/docs/img/3_needs_review_card_with_source_highlight.png)
 
-**Blind test.** A harder synthetic subcontract with seven traps: a requirement in the indemnity section, two clauses that conflict with a "more stringent governs" rule, an ambiguous additional-insured clause, a referenced manual that wasn't provided, and a "recommended, not required" sentence.
+**Blind test.** A harder synthetic subcontract with planted traps, including a requirement in the indemnity section, two clauses that conflict with a "more stringent governs" rule, an ambiguous additional-insured clause, a referenced manual that wasn't provided and a "recommended, not required" sentence.
 
 | Measure | Result |
 |---|---|
